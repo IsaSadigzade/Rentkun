@@ -6,6 +6,7 @@ import com.coders.rentkun.dtos.users.responses.CurrentUserResponseDto;
 import com.coders.rentkun.entities.users.User;
 import com.coders.rentkun.entities.users.UserDetails;
 import com.coders.rentkun.entities.users.UserImage;
+import com.coders.rentkun.enums.users.Gender;
 import com.coders.rentkun.repositories.UserDetailsRepository;
 import com.coders.rentkun.repositories.UserImageRepository;
 import com.coders.rentkun.repositories.UserRepository;
@@ -254,7 +255,8 @@ public class UserServiceImpl implements UserService {
         return images;
     }
 
-    private static CurrentUserResponseDto entityToResponse(User user) {
+    private static CurrentUserResponseDto
+    entityToResponse(User user) {
         CurrentUserResponseDto currentUserDto = new CurrentUserResponseDto();
         currentUserDto.setId(user.getId());
         currentUserDto.setEmail(user.getEmail());

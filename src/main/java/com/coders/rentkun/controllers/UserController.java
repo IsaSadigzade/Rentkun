@@ -2,7 +2,6 @@ package com.coders.rentkun.controllers;
 
 import com.coders.rentkun.core.utilities.results.DataResult;
 import com.coders.rentkun.core.utilities.results.Result;
-import com.coders.rentkun.core.utilities.results.SuccessDataResult;
 import com.coders.rentkun.dtos.users.requests.*;
 import com.coders.rentkun.dtos.users.responses.CurrentUserResponseDto;
 import com.coders.rentkun.services.UserService;
@@ -17,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 
     private final UserService userService;
@@ -62,7 +62,7 @@ public class UserController {
         return userService.updatePassword(userId, userPasswordUpdateRequestDto);
     }
 
-    @PutMapping("/update-email-and-password/{userId}")
+    @PutMapping("/update-email-and-phone-number/{userId}")
     public Result updateEmailAndPhoneNumber(@PathVariable Long userId, @RequestBody UserEmailAndPhoneNumberUpdateRequestDto userEmailAndPhoneNumberUpdateRequestDto) {
         return userService.updateEmailAndPhoneNumber(userId, userEmailAndPhoneNumberUpdateRequestDto);
     }
@@ -73,12 +73,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(uploadImage);
     }
-
-//    @PostMapping("/image-upload/{userId}")
-//    public ResponseEntity<String> uploadImage(@PathVariable Long userId, @RequestBody MultipartFile file) {
-//        String response = userService.uploadImageToFileSystem(userId, file);
-//        return ResponseEntity.ok().body(response);
-//    }
 
     @GetMapping("/image-download/{userId}")
     public ResponseEntity<?> downloadImageFromFileSystem(@PathVariable Long userId) {

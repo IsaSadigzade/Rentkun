@@ -24,8 +24,8 @@ public class UserDetails {
     private String email;
     @Column(unique = true)
     private String phoneNumber;
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
+//    @Enumerated(EnumType.STRING)
+    private String gender;
     private String cityAndZipCode;
     private String location;
 

@@ -16,7 +16,7 @@ public class CurrentUserResponseDto {
     private String lastName;
     private String phoneNumber;
     private String email;
-    private Gender gender;
+    private String gender;
     private String cityAndZipCode;
     private String location;
     private LocalDate dateOfBirth;

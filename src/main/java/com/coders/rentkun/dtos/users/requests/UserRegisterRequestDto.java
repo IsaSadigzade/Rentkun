@@ -17,7 +17,7 @@ public class UserRegisterRequestDto {
     private String password;
     private String confirmPassword;
     private String phoneNumber;
-    private Gender gender;
+    private String gender;
     private String cityAndZipCode;
     private String location;
     private LocalDate birthDate;

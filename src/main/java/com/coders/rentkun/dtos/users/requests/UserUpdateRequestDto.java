@@ -15,7 +15,7 @@ public class UserUpdateRequestDto {
     private String lastName;
     private String email;
     private String phoneNumber;
-    private Gender gender;
+    private String gender;
     private String cityAndZipCode;
     private String location;
     private LocalDate birthDate;
