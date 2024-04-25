@@ -2,7 +2,6 @@ package com.coders.rentkun.controllers;
 
 import com.coders.rentkun.core.utilities.results.DataResult;
 import com.coders.rentkun.core.utilities.results.Result;
-import com.coders.rentkun.dtos.users.requests.*;
 import com.coders.rentkun.dtos.users.responses.CurrentUserResponseDto;
 import com.coders.rentkun.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
