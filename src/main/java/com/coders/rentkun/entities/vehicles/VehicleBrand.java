@@ -15,7 +15,7 @@ public class VehicleBrand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String brandName;
+    private String name;
 
     //TODO: mappedBy = "vehicleBrand" can will added
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

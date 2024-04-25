@@ -13,7 +13,7 @@ public class VehicleModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String modelName;
+    private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
