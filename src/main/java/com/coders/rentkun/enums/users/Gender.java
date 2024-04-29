@@ -1,6 +1,12 @@
 package com.coders.rentkun.enums.users;
 
 public enum Gender {
-    MAN,
-    WOMAN
+    MAN("MAN"),
+    WOMAN("WOMAN");
+
+    public final String gender;
+
+    Gender(String gender) {
+        this.gender = gender;
+    }
 }

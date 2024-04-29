@@ -1,5 +1,6 @@
 package com.coders.rentkun.entities.vehicles;
 
+import com.coders.rentkun.enums.common.RentalStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,9 +17,11 @@ public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private boolean available;
-    private boolean rented;
-    private boolean bookmarked;
+    private boolean available = true;
+
+    @Enumerated(EnumType.STRING)
+    private RentalStatus rentalStatus;
+
     //TODO: These dates for advert
     private LocalDate availableFromDate;
     private LocalDate availableToDate;
