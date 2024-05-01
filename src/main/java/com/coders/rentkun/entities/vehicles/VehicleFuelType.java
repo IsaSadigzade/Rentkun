@@ -1,5 +1,6 @@
 package com.coders.rentkun.entities.vehicles;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,5 +18,6 @@ public class VehicleFuelType {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn
+    @JsonIgnore
     private Vehicle vehicle;
 }

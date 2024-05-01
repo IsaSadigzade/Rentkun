@@ -20,8 +20,8 @@ public class UserDetails {
     private Long id;
     private String firstName;
     private String lastName;
-    @Column(unique = true)
-    private String email;
+//    @Column(unique = true)
+//    private String email;
     @Column(unique = true)
     private String phoneNumber;
 //    @Enumerated(EnumType.STRING)

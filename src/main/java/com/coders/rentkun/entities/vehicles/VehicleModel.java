@@ -1,5 +1,6 @@
 package com.coders.rentkun.entities.vehicles;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +16,8 @@ public class VehicleModel {
     private Long id;
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn
+    @JsonIgnore
     private VehicleBrand vehicleBrand;
 }

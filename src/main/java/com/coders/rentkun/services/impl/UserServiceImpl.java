@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
         UserDetails userDetails = new UserDetails();
         userDetails.setFirstName(userRegisterRequestDto.getFirstName());
         userDetails.setLastName(userRegisterRequestDto.getLastName());
-        userDetails.setEmail(userRegisterRequestDto.getEmail());
+//        userDetails.setEmail(userRegisterRequestDto.getEmail());
         userDetails.setPhoneNumber(userRegisterRequestDto.getPhoneNumber());
         userDetails.setGender(userRegisterRequestDto.getGender());
         userDetails.setCityAndZipCode(userRegisterRequestDto.getCityAndZipCode());
@@ -139,7 +139,7 @@ public class UserServiceImpl implements UserService {
                 UserDetails userDetails = optionalUserDetails.get();
                 userDetails.setFirstName(userUpdateRequestDto.getFirstName());
                 userDetails.setLastName(userUpdateRequestDto.getLastName());
-                userDetails.setEmail(userUpdateRequestDto.getEmail());
+//                userDetails.setEmail(userUpdateRequestDto.getEmail());
                 userDetails.setPhoneNumber(userUpdateRequestDto.getPhoneNumber());
                 userDetails.setGender(userUpdateRequestDto.getGender());
                 userDetails.setCityAndZipCode(userUpdateRequestDto.getCityAndZipCode());
@@ -179,7 +179,7 @@ public class UserServiceImpl implements UserService {
             Optional<UserDetails> optionalUserDetails = userDetailsRepository.findById(user.getUserDetails().getId());
             if (optionalUserDetails.isPresent()) {
                 UserDetails userDetails = optionalUserDetails.get();
-                userDetails.setEmail(userEmailAndPhoneNumberUpdateRequestDto.getEmail());
+//                userDetails.setEmail(userEmailAndPhoneNumberUpdateRequestDto.getEmail());
                 userDetails.setPhoneNumber(userEmailAndPhoneNumberUpdateRequestDto.getPhoneNumber());
                 userDetailsRepository.save(userDetails);
             } else {

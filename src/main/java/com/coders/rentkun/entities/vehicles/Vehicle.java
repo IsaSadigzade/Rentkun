@@ -53,4 +53,8 @@ public class Vehicle {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn
     private VehicleLogo vehicleLogo;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn
+    private VehicleType vehicleType;
 }

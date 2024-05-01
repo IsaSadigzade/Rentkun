@@ -1,5 +1,6 @@
 package com.coders.rentkun.entities.vehicles;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,5 +35,6 @@ public class VehicleLogo {
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn
+    @JsonIgnore
     private Vehicle vehicle;
 }

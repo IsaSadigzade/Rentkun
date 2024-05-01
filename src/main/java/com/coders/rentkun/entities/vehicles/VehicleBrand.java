@@ -1,5 +1,6 @@
 package com.coders.rentkun.entities.vehicles;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,9 +17,9 @@ public class VehicleBrand {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private boolean active = true;
 
-    //TODO: mappedBy = "vehicleBrand" can will added
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn
+    @OneToMany(mappedBy = "vehicleBrand", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<VehicleModel> models;
 }
