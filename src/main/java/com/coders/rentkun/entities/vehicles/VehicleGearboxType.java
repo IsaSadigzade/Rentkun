@@ -16,8 +16,7 @@ public class VehicleGearboxType {
     private Long id;
     private String name;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn
+    @OneToOne(mappedBy = "vehicleGearboxType", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     private Vehicle vehicle;
 }

@@ -35,8 +35,7 @@ public class VehicleDetails {
     @Temporal(TemporalType.DATE)
     private LocalDate updatedAt;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn
+    @OneToOne(mappedBy = "vehicleDetails",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     private Vehicle vehicle;
 }

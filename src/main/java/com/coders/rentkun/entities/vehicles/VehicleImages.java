@@ -33,7 +33,7 @@ public class VehicleImages {
     @Temporal(TemporalType.DATE)
     private LocalDate updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn
     @JsonIgnore
     private Vehicle vehicle;

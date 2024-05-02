@@ -33,7 +33,7 @@ public class VehicleLogo {
     @Temporal(TemporalType.DATE)
     private LocalDate updatedAt;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "vehicleLogo", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn
     @JsonIgnore
     private Vehicle vehicle;

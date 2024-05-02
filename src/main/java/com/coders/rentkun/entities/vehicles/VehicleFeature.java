@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class VehicleFeatures {
+public class VehicleFeature {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

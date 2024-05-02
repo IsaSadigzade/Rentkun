@@ -19,7 +19,11 @@ public class VehicleBrand {
     private String name;
     private boolean active = true;
 
-    @OneToMany(mappedBy = "vehicleBrand", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "vehicleBrand", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<VehicleModel> models;
+
+    @OneToOne(mappedBy = "vehicleBrand", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Vehicle vehicle;
 }

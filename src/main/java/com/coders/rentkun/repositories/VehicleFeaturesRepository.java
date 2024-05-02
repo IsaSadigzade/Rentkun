@@ -1,7 +1,12 @@
 package com.coders.rentkun.repositories;
 
-import com.coders.rentkun.entities.vehicles.VehicleFeatures;
+import com.coders.rentkun.entities.vehicles.VehicleFeature;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface VehicleFeaturesRepository extends JpaRepository<VehicleFeatures, Integer> {
+import java.util.Optional;
+
+public interface VehicleFeaturesRepository extends JpaRepository<VehicleFeature, Long> {
+    Optional<VehicleFeature> findById(Long vehicleId);
+
+    Optional<VehicleFeature> findByName(String featureName);
 }

@@ -17,7 +17,7 @@ public class VehicleModel {
     private String name;
     private boolean active = true;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     @JsonIgnore
     private VehicleBrand vehicleBrand;

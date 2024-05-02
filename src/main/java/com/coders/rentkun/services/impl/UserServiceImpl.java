@@ -134,7 +134,7 @@ public class UserServiceImpl implements UserService {
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             Optional<UserDetails> optionalUserDetails = userDetailsRepository.findById(user.getUserDetails().getId());
-//            Optional<UserImage> optionalUserImage = userImageRepository.findById(user.getUserImage().getId());
+//            Optional<UserImage> optionalUserImage = userImageRepository.findByFeatureId(user.getUserImage().getId());
             if (optionalUserDetails.isPresent()) {
                 UserDetails userDetails = optionalUserDetails.get();
                 userDetails.setFirstName(userUpdateRequestDto.getFirstName());

@@ -32,4 +32,44 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<?> modelDoesNotExistExceptionHandler(ModelDoesNotExistException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(value = {FeatureNotFoundException.class})
+    public ResponseEntity<?> featureNotFoundException(FeatureNotFoundException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = {FeatureDoesNotExistException.class})
+    public ResponseEntity<?> featureDoesNotExistException(FeatureDoesNotExistException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {FuelTypeNotFoundException.class})
+    public ResponseEntity<?> fuelTypeNotFoundException(FuelTypeNotFoundException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = {FuelTypeDoesNotExistException.class})
+    public ResponseEntity<?> fuelTypeDoesNotExistException(FuelTypeDoesNotExistException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {GearboxTypeNotFoundException.class})
+    public ResponseEntity<?> gearboxTypeNotFoundException(GearboxTypeNotFoundException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = {GearboxTypeDoesNotExistException.class})
+    public ResponseEntity<?> gearboxTypeDoesNotExistException(GearboxTypeDoesNotExistException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {VehicleTypeNotFoundException.class})
+    public ResponseEntity<?> vehicleTypeNotFoundException(VehicleTypeNotFoundException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = {VehicleTypeDoesNotExistException.class})
+    public ResponseEntity<?> vehicleTypeDoesNotExistException(VehicleTypeDoesNotExistException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

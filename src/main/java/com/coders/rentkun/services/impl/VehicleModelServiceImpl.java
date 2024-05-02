@@ -45,7 +45,7 @@ public class VehicleModelServiceImpl implements VehicleModelService {
     public List<BrandModelResponseDto> getAllModelsWithBrands() {
         return vehicleModelRepository.findAll().stream()
                 .map(brandModelDtoConverter::convertToBrandModelResponse)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -96,7 +96,7 @@ public class VehicleModelServiceImpl implements VehicleModelService {
 
     @Override
     public void deleteBrand(Long modelId) {
-        if (isModelExist(modelId)) {
+        if (!isModelExist(modelId)) {
             vehicleModelRepository.deleteById(modelId);
         } else {
             throw new ModelDoesNotExistException("Model doesn't exist by following modelId: " + modelId);

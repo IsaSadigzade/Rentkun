@@ -27,34 +27,26 @@ public class Vehicle {
     private LocalDate availableToDate;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn
     private VehicleDetails vehicleDetails;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn
     private VehicleBrand vehicleBrand;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn
-    private Set<VehicleFeatures> vehicleFeatures;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "vehicle")
+    private Set<VehicleFeature> vehicleFeatures;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn
     private VehicleGearboxType vehicleGearboxType;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn
     private VehicleFuelType vehicleFuelType;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "vehicle")
     private Set<VehicleImages> vehicleImages;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn
     private VehicleLogo vehicleLogo;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn
     private VehicleType vehicleType;
 }

@@ -36,13 +36,14 @@ import java.util.stream.Collectors;
 
     @Override
     public List<BrandResponseDto> getAllBrands() {
-        return vehicleBrandRepository.findAll().stream().map(brandDtoConverter::convertFromEntityToDto).collect(Collectors.toList());
+        return vehicleBrandRepository.findAll().stream()
+                .map(brandDtoConverter::convertFromEntityToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public BrandResponseDto getBrandByBrandId(Long brandId) {
-        VehicleBrand brand = findBrandById(brandId);
-        return brandDtoConverter.convertFromEntityToDto(brand);
+        return brandDtoConverter.convertFromEntityToDto(findBrandById(brandId));
     }
 
     @Override
@@ -63,7 +64,7 @@ import java.util.stream.Collectors;
 
     @Override
     public void deleteBrand(Long brandId) {
-        if (isBrandExist(brandId)) {
+        if (!isBrandExist(brandId)) {
             vehicleBrandRepository.deleteById(brandId);
         } else {
             throw new BrandDoesNotExistException("Brand doesn't exist by following modelId: " + brandId);

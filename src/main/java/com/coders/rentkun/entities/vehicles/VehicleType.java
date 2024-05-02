@@ -16,7 +16,7 @@ public class VehicleType {
     private Long id;
     private String name;
 
-    @OneToOne
+    @OneToOne(mappedBy = "vehicleType", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn
     @JsonIgnore
     private Vehicle vehicle;
