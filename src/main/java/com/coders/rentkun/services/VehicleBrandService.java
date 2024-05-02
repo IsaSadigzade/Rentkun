@@ -3,7 +3,6 @@ package com.coders.rentkun.services;
 import com.coders.rentkun.dtos.vehicles.requests.CreateBrandRequestDto;
 import com.coders.rentkun.dtos.vehicles.requests.UpdateBrandRequestDto;
 import com.coders.rentkun.dtos.vehicles.responses.BrandResponseDto;
-import com.coders.rentkun.entities.vehicles.VehicleBrand;
 
 import java.util.List;
 
@@ -20,7 +19,11 @@ public interface VehicleBrandService {
 
     void deleteBrand(Long brandId);
 
-    void deactivateBrand(String brandId);
+    void deactivateBrandByBrandId(Long brandId);
 
-    void activateBrand(String brandName);
+    void deactivateBrandByBrandName(String brandName);
+
+    void activateBrandByBrandId(Long brandId);
+
+    void activateBrandByBrandName(String brandName);
 }

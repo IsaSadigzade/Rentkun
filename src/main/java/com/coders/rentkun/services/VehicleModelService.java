@@ -3,7 +3,6 @@ package com.coders.rentkun.services;
 import com.coders.rentkun.dtos.vehicles.requests.CreateModelRequestDto;
 import com.coders.rentkun.dtos.vehicles.requests.UpdateModelRequestDto;
 import com.coders.rentkun.dtos.vehicles.responses.BrandModelResponseDto;
-import com.coders.rentkun.dtos.vehicles.responses.BrandResponseDto;
 import com.coders.rentkun.dtos.vehicles.responses.ModelResponseDto;
 
 import java.util.List;
@@ -14,7 +13,7 @@ public interface VehicleModelService {
     List<BrandModelResponseDto> getAllModelsWithBrands();
 
     List<BrandModelResponseDto> getAllModelsWithActiveBrands();
-    
+
     ModelResponseDto getModelByModelId(Long modelId);
 
     ModelResponseDto getModelByModelName(String modelName);
@@ -23,8 +22,15 @@ public interface VehicleModelService {
 
     List<BrandModelResponseDto> getModelsByBrandName(String brandName);
 
-
     ModelResponseDto updateModel(Long modelId, UpdateModelRequestDto modelRequestDto);
 
     void deleteBrand(Long modelId);
+
+    void deactivateModelByModelId(Long modelId);
+
+    void deactivateModelByModelName(String modelName);
+
+    void activateModelByModelId(Long modelId);
+
+    void activateModelByModelName(String modelName);
 }

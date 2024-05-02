@@ -15,6 +15,7 @@ public class VehicleModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private boolean active = true;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn

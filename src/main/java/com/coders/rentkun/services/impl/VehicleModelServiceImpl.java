@@ -8,6 +8,7 @@ import com.coders.rentkun.dtos.vehicles.responses.ModelResponseDto;
 import com.coders.rentkun.entities.vehicles.VehicleBrand;
 import com.coders.rentkun.entities.vehicles.VehicleModel;
 import com.coders.rentkun.exception.BrandNotFoundException;
+import com.coders.rentkun.exception.ModelDoesNotExistException;
 import com.coders.rentkun.exception.ModelNotFoundException;
 import com.coders.rentkun.repositories.VehicleModelRepository;
 import com.coders.rentkun.services.VehicleModelService;
@@ -95,8 +96,39 @@ public class VehicleModelServiceImpl implements VehicleModelService {
 
     @Override
     public void deleteBrand(Long modelId) {
-        findModelById(modelId);
-        vehicleModelRepository.deleteById(modelId);
+        if (isModelExist(modelId)) {
+            vehicleModelRepository.deleteById(modelId);
+        } else {
+            throw new ModelDoesNotExistException("Model doesn't exist by following modelId: " + modelId);
+        }
+    }
+
+    @Override
+    public void deactivateModelByModelId(Long modelId) {
+        VehicleModel model = findModelById(modelId);
+        model.setActive(false);
+        vehicleModelRepository.save(model);
+    }
+
+    @Override
+    public void deactivateModelByModelName(String modelName) {
+        VehicleModel model = findModelByModelName(modelName);
+        model.setActive(false);
+        vehicleModelRepository.save(model);
+    }
+
+    @Override
+    public void activateModelByModelId(Long modelId) {
+        VehicleModel model = findModelById(modelId);
+        model.setActive(true);
+        vehicleModelRepository.save(model);
+    }
+
+    @Override
+    public void activateModelByModelName(String modelName) {
+        VehicleModel model = findModelByModelName(modelName);
+        model.setActive(true);
+        vehicleModelRepository.save(model);
     }
 
 
@@ -108,6 +140,10 @@ public class VehicleModelServiceImpl implements VehicleModelService {
     public VehicleModel findModelByModelName(String modelName) {
         return vehicleModelRepository.findByName(modelName)
                 .orElseThrow(() -> new BrandNotFoundException("Model couldn't be found by following modelName: " + modelName));
+    }
+
+    private boolean isModelExist(Long modelId) {
+        return vehicleModelRepository.existsById(modelId);
     }
 
     private boolean isBrandActive(String brandName) {

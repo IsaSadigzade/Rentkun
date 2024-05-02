@@ -49,15 +49,27 @@ public class VehicleBrandController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/deactivate/{brandName}")
-    public ResponseEntity<Void> deactivateBrand(@PathVariable String brandName) {
-        vehicleBrandService.deactivateBrand(brandName);
+    @PatchMapping("/{brandId}/deactivate")
+    public ResponseEntity<Void> deactivateBrandByBrandId(@PathVariable Long brandId) {
+        vehicleBrandService.deactivateBrandByBrandId(brandId);
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/activate/{brandName}")
-    public ResponseEntity<Void> activateBrand(@PathVariable String brandName) {
-        vehicleBrandService.activateBrand(brandName);
+    @PatchMapping("{brandName}/deactivate")
+    public ResponseEntity<Void> deactivateBrandByBrandName(@PathVariable String brandName) {
+        vehicleBrandService.deactivateBrandByBrandName(brandName);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{brandId}/activate")
+    public ResponseEntity<Void> activateBrandByBrandId(@PathVariable Long brandId) {
+        vehicleBrandService.activateBrandByBrandId(brandId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{brandName}/activate")
+    public ResponseEntity<Void> activateBrandByBrandName(@PathVariable String brandName) {
+        vehicleBrandService.activateBrandByBrandName(brandName);
         return ResponseEntity.ok().build();
     }
 }

@@ -5,7 +5,9 @@ import com.coders.rentkun.dtos.vehicles.requests.CreateBrandRequestDto;
 import com.coders.rentkun.dtos.vehicles.requests.UpdateBrandRequestDto;
 import com.coders.rentkun.dtos.vehicles.responses.BrandResponseDto;
 import com.coders.rentkun.entities.vehicles.VehicleBrand;
+import com.coders.rentkun.exception.BrandDoesNotExistException;
 import com.coders.rentkun.exception.BrandNotFoundException;
+import com.coders.rentkun.exception.ModelDoesNotExistException;
 import com.coders.rentkun.repositories.VehicleBrandRepository;
 import com.coders.rentkun.services.VehicleBrandService;
 import org.springframework.stereotype.Service;
@@ -61,19 +63,36 @@ import java.util.stream.Collectors;
 
     @Override
     public void deleteBrand(Long brandId) {
-        VehicleBrand brand = findBrandById(brandId);
-        vehicleBrandRepository.delete(brand);
+        if (isBrandExist(brandId)) {
+            vehicleBrandRepository.deleteById(brandId);
+        } else {
+            throw new BrandDoesNotExistException("Brand doesn't exist by following modelId: " + brandId);
+        }
     }
 
     @Override
-    public void deactivateBrand(String brandName) {
+    public void deactivateBrandByBrandId(Long brandId) {
+        VehicleBrand brand = findBrandById(brandId);
+        brand.setActive(false);
+        vehicleBrandRepository.save(brand);
+    }
+
+    @Override
+    public void deactivateBrandByBrandName(String brandName) {
         VehicleBrand brand = findBrandByBrandName(brandName);
         brand.setActive(false);
         vehicleBrandRepository.save(brand);
     }
 
     @Override
-    public void activateBrand(String brandName) {
+    public void activateBrandByBrandId(Long brandId) {
+        VehicleBrand brand = findBrandById(brandId);
+        brand.setActive(true);
+        vehicleBrandRepository.save(brand);
+    }
+
+    @Override
+    public void activateBrandByBrandName(String brandName) {
         VehicleBrand brand = findBrandByBrandName(brandName);
         brand.setActive(true);
         vehicleBrandRepository.save(brand);
@@ -87,5 +106,9 @@ import java.util.stream.Collectors;
     public VehicleBrand findBrandByBrandName(String brandName) {
         return vehicleBrandRepository.findByName(brandName)
                 .orElseThrow(() -> new BrandNotFoundException("Brand couldn't be found by following brandName: " + brandName));
+    }
+
+    private boolean isBrandExist(Long brandId) {
+        return vehicleBrandRepository.existsById(brandId);
     }
 }

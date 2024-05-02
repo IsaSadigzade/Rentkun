@@ -64,4 +64,28 @@ public class VehicleModelController {
         vehicleModelService.deleteBrand(modelId);
         return ResponseEntity.ok().build();
     }
+
+    @PatchMapping("/{modelId}/deactivate")
+    public ResponseEntity<Void> deactivateModelByModelId(@PathVariable Long modelId) {
+        vehicleModelService.deactivateModelByModelId(modelId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("{modelName}/deactivate")
+    public ResponseEntity<Void> deactivateModelByModelName(@PathVariable String modelName) {
+        vehicleModelService.deactivateModelByModelName(modelName);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{modelId}/activate")
+    public ResponseEntity<Void> activateModelByModelId(@PathVariable Long modelId) {
+        vehicleModelService.activateModelByModelId(modelId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{modelName}/activate")
+    public ResponseEntity<Void> activateModelByModelName(@PathVariable String modelName) {
+        vehicleModelService.activateModelByModelName(modelName);
+        return ResponseEntity.ok().build();
+    }
 }

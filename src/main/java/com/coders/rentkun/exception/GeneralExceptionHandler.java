@@ -18,8 +18,18 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = {BrandDoesNotExistException.class})
+    public ResponseEntity<?> brandDoesNotExistExceptionHandler(BrandDoesNotExistException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(value = {ModelNotFoundException.class})
-    public ResponseEntity<?> ModelNotFoundExceptionHandler(ModelNotFoundException exception) {
+    public ResponseEntity<?> modelNotFoundExceptionHandler(ModelNotFoundException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = {ModelDoesNotExistException.class})
+    public ResponseEntity<?> modelDoesNotExistExceptionHandler(ModelDoesNotExistException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }
