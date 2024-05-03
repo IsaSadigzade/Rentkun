@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FeatureResponseDto {
+public class FuelTypeResponseDto {
     private Long id;
-    private String featureName;
+    private String fuelTypeName;
 }
