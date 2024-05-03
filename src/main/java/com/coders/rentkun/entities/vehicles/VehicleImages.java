@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -23,7 +24,9 @@ public class VehicleImages {
 
     private String name;
     private String type;
-    private String filePath;
+
+    @ElementCollection
+    private Set<String> filePaths;
 
     @CreationTimestamp
     @Temporal(TemporalType.DATE)

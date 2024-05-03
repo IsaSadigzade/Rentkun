@@ -7,7 +7,6 @@ import com.coders.rentkun.dtos.vehicles.responses.BrandResponseDto;
 import com.coders.rentkun.entities.vehicles.VehicleBrand;
 import com.coders.rentkun.exception.BrandDoesNotExistException;
 import com.coders.rentkun.exception.BrandNotFoundException;
-import com.coders.rentkun.exception.ModelDoesNotExistException;
 import com.coders.rentkun.repositories.VehicleBrandRepository;
 import com.coders.rentkun.services.VehicleBrandService;
 import org.springframework.stereotype.Service;

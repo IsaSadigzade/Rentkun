@@ -72,4 +72,14 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<?> vehicleTypeDoesNotExistException(VehicleTypeDoesNotExistException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(value = {VehicleDetailsNotFoundException.class})
+    public ResponseEntity<?> vehicleDetailsNotFoundException(VehicleDetailsNotFoundException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = {VehicleDetailsDoesNotExistException.class})
+    public ResponseEntity<?> vehicleDetailsDoesNotExistException(VehicleDetailsDoesNotExistException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -24,18 +24,31 @@ public class VehicleDetails {
     private String numberOfSeats;
     private String distance;
     private String color;
-    private LocalDate year;
+    private String year;
     private String description;
 
     @CreationTimestamp
-    @Temporal(TemporalType.DATE)
-    private LocalDate createdAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Temporal(TemporalType.DATE)
-    private LocalDate updatedAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime updatedAt;
 
     @OneToOne(mappedBy = "vehicleDetails",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     private Vehicle vehicle;
+
+    public VehicleDetails(String city, String country, String plateNumber, String numberOfSeats, String distance, String color, String year, String description, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.city = city;
+        this.country = country;
+        this.plateNumber = plateNumber;
+        this.numberOfSeats = numberOfSeats;
+        this.distance = distance;
+        this.color = color;
+        this.year = year;
+        this.description = description;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 }

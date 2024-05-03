@@ -23,18 +23,25 @@ public class VehicleLogo {
 
     private String name;
     private String type;
+    private String url;
+    private String downloadUrl;
     private String filePath;
 
     @CreationTimestamp
     @Temporal(TemporalType.DATE)
     private LocalDate createdAt;
 
-    @UpdateTimestamp
-    @Temporal(TemporalType.DATE)
-    private LocalDate updatedAt;
+//    @UpdateTimestamp
+//    @Temporal(TemporalType.DATE)
+//    private LocalDate updatedAt;
 
     @OneToOne(mappedBy = "vehicleLogo", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn
     @JsonIgnore
     private Vehicle vehicle;
+
+    public VehicleLogo(String name, String url) {
+        this.name = name;
+        this.url = url;
+    }
 }
