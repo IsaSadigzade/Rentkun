@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class BrandDtoConverter {
 
-    public BrandResponseDto convertFromEntityToDto(VehicleBrand entity) {
+    public BrandResponseDto convertToResponse(VehicleBrand entity) {
         return new BrandResponseDto(entity.getId(), entity.getName());
     }
 

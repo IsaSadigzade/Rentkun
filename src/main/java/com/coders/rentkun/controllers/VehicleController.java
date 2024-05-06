@@ -18,6 +18,7 @@ public class VehicleController {
     public VehicleController(VehicleService vehicleService) {
         this.vehicleService = vehicleService;
     }
+
     @PostMapping
     public ResponseEntity<VehicleResponseDto> saveVehicle(@RequestBody CreateVehicleRequestByIDs vehicleRequestDto) {
         return ResponseEntity.ok(vehicleService.saveVehicle(vehicleRequestDto));

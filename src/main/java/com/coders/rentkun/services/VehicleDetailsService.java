@@ -4,6 +4,7 @@ import com.coders.rentkun.dtos.vehicles.converts.VehicleDetailsDtoConverter;
 import com.coders.rentkun.dtos.vehicles.requests.CreateVehicleDetailsRequestDto;
 import com.coders.rentkun.dtos.vehicles.requests.UpdateVehicleDetailsRequestDto;
 import com.coders.rentkun.dtos.vehicles.responses.VehicleDetailsResponseDto;
+import com.coders.rentkun.entities.vehicles.Vehicle;
 import com.coders.rentkun.entities.vehicles.VehicleDetails;
 import com.coders.rentkun.exception.FuelTypeNotFoundException;
 import com.coders.rentkun.exception.VehicleTypeDoesNotExistException;
@@ -58,12 +59,20 @@ public class VehicleDetailsService {
         }
     }
 
-    public VehicleDetails findByVehicleDetailsId(Long vehicleDetailsId) {
+    protected VehicleDetails findByVehicleDetailsId(Long vehicleDetailsId) {
         return vehicleDetailsRepository.findById(vehicleDetailsId)
                 .orElseThrow(() -> new FuelTypeNotFoundException("Vehicle Details couldn't be found by following id: " + vehicleDetailsId));
     }
 
-    private boolean isVehicleDetailsExist(Long vehicleDetailsId) {
+    protected boolean isVehicleDetailsExist(Long vehicleDetailsId) {
         return vehicleDetailsRepository.existsById(vehicleDetailsId);
     }
+
+    protected VehicleDetails save(CreateVehicleDetailsRequestDto vehicleDetailsRequestDto) {
+        VehicleDetails convertedDetails = vehicleDetailsDtoConverter.convertToEntity(vehicleDetailsRequestDto);
+        return vehicleDetailsRepository.save(
+                convertedDetails
+        );
+    }
+
 }

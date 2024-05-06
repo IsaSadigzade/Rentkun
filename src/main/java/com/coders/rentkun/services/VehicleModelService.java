@@ -7,7 +7,6 @@ import com.coders.rentkun.dtos.vehicles.responses.BrandModelResponseDto;
 import com.coders.rentkun.dtos.vehicles.responses.ModelResponseDto;
 import com.coders.rentkun.entities.vehicles.VehicleBrand;
 import com.coders.rentkun.entities.vehicles.VehicleModel;
-import com.coders.rentkun.exception.BrandNotFoundException;
 import com.coders.rentkun.exception.ModelDoesNotExistException;
 import com.coders.rentkun.exception.ModelNotFoundException;
 import com.coders.rentkun.repositories.VehicleModelRepository;
@@ -118,21 +117,21 @@ public class VehicleModelService {
     }
 
 
-    public VehicleModel findModelById(Long modelId) {
+    protected VehicleModel findModelById(Long modelId) {
         return vehicleModelRepository.findById(modelId)
                 .orElseThrow(() -> new ModelNotFoundException("Model couldn't be found by following id: " + modelId));
     }
 
-    public VehicleModel findModelByModelName(String modelName) {
+    protected VehicleModel findModelByModelName(String modelName) {
         return vehicleModelRepository.findByName(modelName)
-                .orElseThrow(() -> new BrandNotFoundException("Model couldn't be found by following modelName: " + modelName));
+                .orElseThrow(() -> new ModelNotFoundException("Model couldn't be found by following modelName: " + modelName));
     }
 
-    private boolean isModelExist(Long modelId) {
+    protected boolean isModelExist(Long modelId) {
         return vehicleModelRepository.existsById(modelId);
     }
 
-    private boolean isBrandActive(String brandName) {
+    protected boolean isBrandActive(String brandName) {
         VehicleBrand foundBrand = vehicleBrandService.findBrandByBrandName(brandName);
         return foundBrand != null && foundBrand.isActive();
     }

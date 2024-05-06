@@ -62,17 +62,17 @@ public class VehicleGearboxTypeService {
         }
     }
 
-    public VehicleGearboxType findByGearboxTypeId(Long gearboxTypeId) {
+    protected VehicleGearboxType findByGearboxTypeId(Long gearboxTypeId) {
         return vehicleGearboxTypeRepository.findById(gearboxTypeId)
                 .orElseThrow(() -> new GearboxTypeNotFoundException("Vehicle GearboxType couldn't be found by following id: " + gearboxTypeId));
     }
 
-    public VehicleGearboxType findByGearboxTypeName(String gearboxTypeName) {
+    protected VehicleGearboxType findByGearboxTypeName(String gearboxTypeName) {
         return vehicleGearboxTypeRepository.findByName(gearboxTypeName)
                 .orElseThrow(() -> new GearboxTypeNotFoundException("Vehicle GearboxType couldn't be found by following gearboxTypeName: " + gearboxTypeName));
     }
 
-    private boolean isGearboxTypeExist(Long gearboxTypeId) {
+    protected boolean isGearboxTypeExist(Long gearboxTypeId) {
         return vehicleGearboxTypeRepository.existsById(gearboxTypeId);
     }
 }

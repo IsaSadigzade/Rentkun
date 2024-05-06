@@ -19,7 +19,7 @@ public class VehicleDetailsDtoConverter {
                 entity.getNumberOfSeats(),
                 entity.getDistance(),
                 entity.getColor(),
-                String.valueOf(entity.getYear()),
+                entity.getYear(),
                 entity.getDescription()
         );
     }

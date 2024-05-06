@@ -10,7 +10,9 @@ import com.coders.rentkun.exception.FeatureNotFoundException;
 import com.coders.rentkun.repositories.VehicleFeaturesRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,17 +64,26 @@ public class VehicleFeaturesService {
         }
     }
 
-    public VehicleFeature findByFeatureId(Long featureId) {
+    protected Set<VehicleFeature> findFeaturesByIds(Set<Long> featureIds) {
+        Set<VehicleFeature> features = new HashSet<>();
+        for (Long featureId : featureIds) {
+            VehicleFeature featureOptional = findByFeatureId(featureId);
+            features.add(featureOptional);
+        }
+        return features;
+    }
+
+    protected VehicleFeature findByFeatureId(Long featureId) {
         return vehicleFeaturesRepository.findById(featureId)
                 .orElseThrow(() -> new FeatureNotFoundException("Vehicle Feature couldn't be found by following id: " + featureId));
     }
 
-    public VehicleFeature findByFeatureName(String featureName) {
+    protected VehicleFeature findByFeatureName(String featureName) {
         return vehicleFeaturesRepository.findByName(featureName)
                 .orElseThrow(() -> new FeatureNotFoundException("Vehicle Feature couldn't be found by following featureName: " + featureName));
     }
 
-    private boolean isFeatureExist(Long featureId) {
+    protected boolean isFeatureExist(Long featureId) {
         return vehicleFeaturesRepository.existsById(featureId);
     }
 }

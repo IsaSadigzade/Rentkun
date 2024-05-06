@@ -76,17 +76,17 @@ public class VehicleLogoService {
         }
     }
 
-    private VehicleLogo findByVehicleLogoId(Long vehicleLogoId) {
+    protected VehicleLogo findByVehicleLogoId(Long vehicleLogoId) {
         return vehicleLogoRepository.findById(vehicleLogoId)
                 .orElseThrow(() -> new LogoNotFoundException("Logo doesn't found with id: " + vehicleLogoId));
     }
 
-    private VehicleLogo findByVehicleLogoName(String vehicleLogoName) {
+    protected VehicleLogo findByVehicleLogoName(String vehicleLogoName) {
         return vehicleLogoRepository.findByName(vehicleLogoName)
                 .orElseThrow(() -> new LogoNotFoundException("Logo doesn't found with name: " + vehicleLogoName));
     }
 
-    private boolean isFileExist(Long vehicleLogoId) {
+    protected boolean isFileExist(Long vehicleLogoId) {
         return vehicleLogoRepository.existsById(vehicleLogoId);
     }
 }

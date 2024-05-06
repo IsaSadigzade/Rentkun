@@ -62,17 +62,17 @@ public class VehicleFuelTypeService {
         }
     }
 
-    public VehicleFuelType findByFuelTypeId(Long fuelTypeId) {
+    protected VehicleFuelType findByFuelTypeId(Long fuelTypeId) {
         return vehicleFuelTypeRepository.findById(fuelTypeId)
                 .orElseThrow(() -> new FuelTypeNotFoundException("Vehicle FuelType couldn't be found by following id: " + fuelTypeId));
     }
 
-    public VehicleFuelType findByFuelTypeName(String fuelTypeName) {
+    protected VehicleFuelType findByFuelTypeName(String fuelTypeName) {
         return vehicleFuelTypeRepository.findByName(fuelTypeName)
                 .orElseThrow(() -> new FuelTypeNotFoundException("Vehicle FuelType couldn't be found by following featureName: " + fuelTypeName));
     }
 
-    private boolean isFuelTypeExist(Long fuelTypeId) {
+    protected boolean isFuelTypeExist(Long fuelTypeId) {
         return vehicleFuelTypeRepository.existsById(fuelTypeId);
     }
 }

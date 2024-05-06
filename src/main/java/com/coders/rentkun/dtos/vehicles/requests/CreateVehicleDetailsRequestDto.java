@@ -1,5 +1,7 @@
 package com.coders.rentkun.dtos.vehicles.requests;
 
+import com.coders.rentkun.entities.vehicles.Vehicle;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

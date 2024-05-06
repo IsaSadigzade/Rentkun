@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
     }
 
     public BrandResponseDto saveBrand(CreateBrandRequestDto brandRequestDto) {
-        return brandDtoConverter.convertFromEntityToDto(
+        return brandDtoConverter.convertToResponse(
                 vehicleBrandRepository.save(
                         brandDtoConverter.convertFromRequestToEntity(brandRequestDto)
                 )
@@ -33,22 +33,22 @@ import java.util.stream.Collectors;
 
     public List<BrandResponseDto> getAllBrands() {
         return vehicleBrandRepository.findAll().stream()
-                .map(brandDtoConverter::convertFromEntityToDto)
+                .map(brandDtoConverter::convertToResponse)
                 .collect(Collectors.toList());
     }
 
     public BrandResponseDto getBrandByBrandId(Long brandId) {
-        return brandDtoConverter.convertFromEntityToDto(findBrandById(brandId));
+        return brandDtoConverter.convertToResponse(findBrandById(brandId));
     }
 
     public BrandResponseDto getBrandByBrandName(String brandName) {
         VehicleBrand brand = findBrandByBrandName(brandName);
-        return brandDtoConverter.convertFromEntityToDto(brand);
+        return brandDtoConverter.convertToResponse(brand);
     }
 
     public BrandResponseDto updateBrand(Long brandId, UpdateBrandRequestDto brandRequestDto) {
         VehicleBrand brand = findBrandById(brandId);
-        return brandDtoConverter.convertFromEntityToDto(
+        return brandDtoConverter.convertToResponse(
                 vehicleBrandRepository.save(
                         brandDtoConverter.convertFromRequestToEntity(brand, brandRequestDto)
                 )
@@ -87,17 +87,17 @@ import java.util.stream.Collectors;
         vehicleBrandRepository.save(brand);
     }
 
-    public VehicleBrand findBrandById(Long brandId) {
+    protected VehicleBrand findBrandById(Long brandId) {
         return vehicleBrandRepository.findById(brandId)
                 .orElseThrow(() -> new BrandNotFoundException("Brand couldn't be found by following id: " + brandId));
     }
 
-    public VehicleBrand findBrandByBrandName(String brandName) {
+    protected VehicleBrand findBrandByBrandName(String brandName) {
         return vehicleBrandRepository.findByName(brandName)
                 .orElseThrow(() -> new BrandNotFoundException("Brand couldn't be found by following brandName: " + brandName));
     }
 
-    private boolean isBrandExist(Long brandId) {
+    protected boolean isBrandExist(Long brandId) {
         return vehicleBrandRepository.existsById(brandId);
     }
 }
