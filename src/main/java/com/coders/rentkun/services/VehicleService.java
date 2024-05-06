@@ -1,7 +1,20 @@
 package com.coders.rentkun.services;
 
-import com.coders.rentkun.entities.vehicles.Vehicle;
+import com.coders.rentkun.dtos.vehicles.requests.CreateVehicleRequestByIDs;
+import com.coders.rentkun.dtos.vehicles.responses.VehicleResponseDto;
+import com.coders.rentkun.repositories.VehicleRepository;
+import org.springframework.stereotype.Service;
 
-public interface VehicleService {
-    void saveVehicle(Vehicle vehicle);
+@Service
+public class VehicleService {
+
+    private final VehicleRepository vehicleRepository;
+
+    public VehicleService(VehicleRepository vehicleRepository) {
+        this.vehicleRepository = vehicleRepository;
+    }
+
+    public VehicleResponseDto saveVehicle(CreateVehicleRequestByIDs vehicleRequestDto) {
+        return null;
+    }
 }

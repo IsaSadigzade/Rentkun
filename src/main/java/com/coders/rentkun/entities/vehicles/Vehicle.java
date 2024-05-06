@@ -17,20 +17,26 @@ public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private boolean available = true;
+//    private boolean available = true;
 
-    @Enumerated(EnumType.STRING)
-    private RentalStatus rentalStatus;
+//    @Enumerated(EnumType.STRING)
+//    private RentalStatus rentalStatus;
 
     //TODO: These dates for advert
-    private LocalDate availableFromDate;
-    private LocalDate availableToDate;
+//    private LocalDate availableFromDate;
+//    private LocalDate availableToDate;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private VehicleDetails vehicleDetails;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private VehicleBrand vehicleBrand;
+
+//    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    private VehicleModel vehicleModel;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private VehicleType vehicleType;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "vehicle")
     private Set<VehicleFeature> vehicleFeatures;
@@ -46,7 +52,4 @@ public class Vehicle {
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private VehicleLogo vehicleLogo;
-
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private VehicleType vehicleType;
 }

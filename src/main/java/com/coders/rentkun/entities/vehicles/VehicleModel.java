@@ -21,4 +21,8 @@ public class VehicleModel {
     @JoinColumn
     @JsonIgnore
     private VehicleBrand vehicleBrand;
+
+//    @OneToOne(mappedBy = "vehicleModel", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JsonIgnore
+//    private Vehicle vehicle;
 }

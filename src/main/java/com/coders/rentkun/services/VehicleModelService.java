@@ -1,36 +1,139 @@
 package com.coders.rentkun.services;
 
+import com.coders.rentkun.dtos.vehicles.converts.BrandModelDtoConverter;
 import com.coders.rentkun.dtos.vehicles.requests.CreateModelRequestDto;
 import com.coders.rentkun.dtos.vehicles.requests.UpdateModelRequestDto;
 import com.coders.rentkun.dtos.vehicles.responses.BrandModelResponseDto;
 import com.coders.rentkun.dtos.vehicles.responses.ModelResponseDto;
+import com.coders.rentkun.entities.vehicles.VehicleBrand;
+import com.coders.rentkun.entities.vehicles.VehicleModel;
+import com.coders.rentkun.exception.BrandNotFoundException;
+import com.coders.rentkun.exception.ModelDoesNotExistException;
+import com.coders.rentkun.exception.ModelNotFoundException;
+import com.coders.rentkun.repositories.VehicleModelRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-public interface VehicleModelService {
-    ModelResponseDto saveModel(CreateModelRequestDto modelRequestDto);
+@Service
+public class VehicleModelService {
+    private final VehicleModelRepository vehicleModelRepository;
+    private final VehicleBrandService vehicleBrandService;
+    private final BrandModelDtoConverter brandModelDtoConverter;
 
-    List<BrandModelResponseDto> getAllModelsWithBrands();
+    public VehicleModelService(VehicleModelRepository vehicleModelRepository,
+                               VehicleBrandService vehicleBrandService,
+                               BrandModelDtoConverter brandModelDtoConverter) {
+        this.vehicleModelRepository = vehicleModelRepository;
+        this.vehicleBrandService = vehicleBrandService;
+        this.brandModelDtoConverter = brandModelDtoConverter;
+    }
 
-    List<BrandModelResponseDto> getAllModelsWithActiveBrands();
+    public ModelResponseDto saveModel(CreateModelRequestDto modelRequestDto) {
+        VehicleBrand brand = vehicleBrandService.findBrandByBrandName(modelRequestDto.getBrandName());
+        return brandModelDtoConverter.convertToModelResponse(
+                vehicleModelRepository.save(
+                        brandModelDtoConverter.convertFromRequestToEntity(brand, modelRequestDto)
+                )
+        );
+    }
 
-    ModelResponseDto getModelByModelId(Long modelId);
+    public List<BrandModelResponseDto> getAllModelsWithBrands() {
+        return vehicleModelRepository.findAll().stream()
+                .map(brandModelDtoConverter::convertToBrandModelResponse)
+                .collect(Collectors.toList());
+    }
 
-    ModelResponseDto getModelByModelName(String modelName);
+    public List<BrandModelResponseDto> getAllModelsWithActiveBrands() {
+        List<BrandModelResponseDto> responses = vehicleModelRepository.findAll().stream()
+                .map(brandModelDtoConverter::convertToBrandModelResponse)
+                .toList();
 
-    List<BrandModelResponseDto> getModelsByBrandId(Long brandId);
+        return responses.stream()
+                .filter(model -> isBrandActive(model.getBrandName()))
+                .collect(Collectors.toList());
+    }
 
-    List<BrandModelResponseDto> getModelsByBrandName(String brandName);
+    public ModelResponseDto getModelByModelId(Long modelId) {
+        return brandModelDtoConverter.convertToModelResponse(findModelById(modelId));
+    }
 
-    ModelResponseDto updateModel(Long modelId, UpdateModelRequestDto modelRequestDto);
+    public ModelResponseDto getModelByModelName(String modelName) {
+        return brandModelDtoConverter.convertToModelResponse(findModelByModelName(modelName));
+    }
 
-    void deleteBrand(Long modelId);
+    public List<BrandModelResponseDto> getModelsByBrandId(Long brandId) {
+        List<VehicleModel> vehicleModels = vehicleModelRepository.findByVehicleBrandId(brandId);
+        return vehicleModels.stream()
+                .map(brandModelDtoConverter::convertToBrandModelResponse)
+                .collect(Collectors.toList());
+    }
 
-    void deactivateModelByModelId(Long modelId);
+    public List<BrandModelResponseDto> getModelsByBrandName(String brandName) {
+        List<VehicleModel> vehicleModels = vehicleModelRepository.findByVehicleBrandName(brandName);
+        return vehicleModels.stream()
+                .map(brandModelDtoConverter::convertToBrandModelResponse)
+                .collect(Collectors.toList());
+    }
 
-    void deactivateModelByModelName(String modelName);
+    public ModelResponseDto updateModel(Long modelId, UpdateModelRequestDto modelRequestDto) {
+        return brandModelDtoConverter.convertToModelResponse(
+                vehicleModelRepository.save(
+                        brandModelDtoConverter.convertFromRequestToEntity(findModelById(modelId), modelRequestDto)
+                )
+        );
+    }
 
-    void activateModelByModelId(Long modelId);
+    public void deleteBrand(Long modelId) {
+        if (!isModelExist(modelId)) {
+            vehicleModelRepository.deleteById(modelId);
+        } else {
+            throw new ModelDoesNotExistException("Model doesn't exist by following modelId: " + modelId);
+        }
+    }
 
-    void activateModelByModelName(String modelName);
+    public void deactivateModelByModelId(Long modelId) {
+        VehicleModel model = findModelById(modelId);
+        model.setActive(false);
+        vehicleModelRepository.save(model);
+    }
+
+    public void deactivateModelByModelName(String modelName) {
+        VehicleModel model = findModelByModelName(modelName);
+        model.setActive(false);
+        vehicleModelRepository.save(model);
+    }
+
+    public void activateModelByModelId(Long modelId) {
+        VehicleModel model = findModelById(modelId);
+        model.setActive(true);
+        vehicleModelRepository.save(model);
+    }
+
+    public void activateModelByModelName(String modelName) {
+        VehicleModel model = findModelByModelName(modelName);
+        model.setActive(true);
+        vehicleModelRepository.save(model);
+    }
+
+
+    public VehicleModel findModelById(Long modelId) {
+        return vehicleModelRepository.findById(modelId)
+                .orElseThrow(() -> new ModelNotFoundException("Model couldn't be found by following id: " + modelId));
+    }
+
+    public VehicleModel findModelByModelName(String modelName) {
+        return vehicleModelRepository.findByName(modelName)
+                .orElseThrow(() -> new BrandNotFoundException("Model couldn't be found by following modelName: " + modelName));
+    }
+
+    private boolean isModelExist(Long modelId) {
+        return vehicleModelRepository.existsById(modelId);
+    }
+
+    private boolean isBrandActive(String brandName) {
+        VehicleBrand foundBrand = vehicleBrandService.findBrandByBrandName(brandName);
+        return foundBrand != null && foundBrand.isActive();
+    }
 }
