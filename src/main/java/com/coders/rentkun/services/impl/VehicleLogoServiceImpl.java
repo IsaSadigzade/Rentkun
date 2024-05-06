@@ -1,26 +1,24 @@
 package com.coders.rentkun.services.impl;
 
 import com.coders.rentkun.dtos.vehicles.converts.LogoDtoConverter;
-import com.coders.rentkun.dtos.vehicles.responses.VehicleLogoResponseDto;
+import com.coders.rentkun.dtos.vehicles.responses.LogoResponseDto;
 import com.coders.rentkun.entities.vehicles.VehicleLogo;
+import com.coders.rentkun.exception.LogoDoesNotExistException;
+import com.coders.rentkun.exception.LogoNotFoundException;
 import com.coders.rentkun.repositories.VehicleLogoRepository;
 import com.coders.rentkun.services.VehicleLogoService;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.stream.Stream;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class VehicleLogoServiceImpl implements VehicleLogoService {
     private final VehicleLogoRepository vehicleLogoRepository;
     private final LogoDtoConverter logoDtoConverter;
-    private final Path root = Paths.get("C:\\Users\\isasa\\OneDrive\\Masaüstü\\rentkun\\src\\main\\resources\\images\\vehicle_images\\logos\\");
 
     public VehicleLogoServiceImpl(VehicleLogoRepository vehicleLogoRepository, LogoDtoConverter logoDtoConverter) {
         this.vehicleLogoRepository = vehicleLogoRepository;
@@ -28,7 +26,7 @@ public class VehicleLogoServiceImpl implements VehicleLogoService {
     }
 
     @Override
-    public VehicleLogoResponseDto save(MultipartFile file) {
+    public LogoResponseDto save(MultipartFile file) {
         try {
             return logoDtoConverter.convertToResponse(
                     vehicleLogoRepository.save(
@@ -41,12 +39,30 @@ public class VehicleLogoServiceImpl implements VehicleLogoService {
     }
 
     @Override
+    public List<LogoResponseDto> getLogos() {
+        return vehicleLogoRepository.findAll().stream()
+                .map(logoDtoConverter::convertToResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public LogoResponseDto getLogoResponseById(Long vehicleLogoId) {
+        return logoDtoConverter.convertToResponse(
+                findByVehicleLogoId(vehicleLogoId)
+        );
+    }
+
+    @Override
+    public byte[] getLogoById(Long vehicleLogoId) {
+        return getLogoByFileName(findByVehicleLogoId(vehicleLogoId).getName());
+    }
+
+    @Override
     public byte[] getLogoByFileName(String filename) {
         return logoDtoConverter.convertResourceToByte(
                 logoDtoConverter.convertEntityToResource(findByVehicleLogoName(filename))
         );
     }
-
 
     @Override
     public Resource download(String filename) {
@@ -59,22 +75,26 @@ public class VehicleLogoServiceImpl implements VehicleLogoService {
         }
     }
 
-//    @Override
-//    public void deleteAll() {
-//        FileSystemUtils.deleteRecursively(root.toFile());
-//    }
-//
-//    @Override
-//    public Stream<Path> loadAll() {
-//        try {
-//            return Files.walk(this.root, 1).filter(path -> !path.equals(this.root)).map(this.root::relativize);
-//        } catch (IOException e) {
-//            throw new RuntimeException("Could not load the files!");
-//        }
-//    }
+    @Override
+    public void deleteVehicleLogo(Long vehicleLogoId) {
+        if (isFileExist(vehicleLogoId)) {
+            vehicleLogoRepository.deleteById(vehicleLogoId);
+        } else {
+            throw new LogoDoesNotExistException("Vehicle Logo does not exist!");
+        }
+    }
+
+    private VehicleLogo findByVehicleLogoId(Long vehicleLogoId) {
+        return vehicleLogoRepository.findById(vehicleLogoId)
+                .orElseThrow(() -> new LogoNotFoundException("Logo doesn't found with id: " + vehicleLogoId));
+    }
 
     private VehicleLogo findByVehicleLogoName(String vehicleLogoName) {
         return vehicleLogoRepository.findByName(vehicleLogoName)
-                .orElseThrow(() -> new RuntimeException("Logo doesn't found with name: " + vehicleLogoName));
+                .orElseThrow(() -> new LogoNotFoundException("Logo doesn't found with name: " + vehicleLogoName));
+    }
+
+    private boolean isFileExist(Long vehicleLogoId) {
+        return vehicleLogoRepository.existsById(vehicleLogoId);
     }
 }

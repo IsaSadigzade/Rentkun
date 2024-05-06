@@ -2,8 +2,7 @@ package com.coders.rentkun.controllers;
 
 import com.coders.rentkun.core.utilities.results.DataResult;
 import com.coders.rentkun.core.utilities.results.SuccessDataResult;
-import com.coders.rentkun.dtos.vehicles.responses.VehicleLogoResponseDto;
-import com.coders.rentkun.entities.vehicles.VehicleLogo;
+import com.coders.rentkun.dtos.vehicles.responses.LogoResponseDto;
 import com.coders.rentkun.services.VehicleLogoService;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -12,12 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/vehicle/logo")
@@ -29,10 +24,29 @@ public class VehicleLogoController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<DataResult<VehicleLogoResponseDto>> uploadFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<DataResult<LogoResponseDto>> uploadFile(@RequestParam("file") MultipartFile file) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new SuccessDataResult<>(vehicleLogoService.save(file),"File uploaded successfully"));
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<LogoResponseDto>> getLogos() {
+        return ResponseEntity.ok(vehicleLogoService.getLogos());
+    }
+
+    @GetMapping("/response-by-id/{vehicleLogoId}")
+    public ResponseEntity<LogoResponseDto> getLogoResponseById(@PathVariable Long vehicleLogoId) {
+        return ResponseEntity.ok(vehicleLogoService.getLogoResponseById(vehicleLogoId));
+    }
+
+    @GetMapping("/id/{vehicleLogoId}")
+    @ResponseBody
+    public ResponseEntity<byte[]> getLogoById(@PathVariable Long vehicleLogoId) {
+        byte[] fileBytes = vehicleLogoService.getLogoById(vehicleLogoId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_PNG);
+        return new ResponseEntity<>(fileBytes, headers, HttpStatus.OK);
     }
 
     @GetMapping("/{filename:.+}")
@@ -44,6 +58,7 @@ public class VehicleLogoController {
         return new ResponseEntity<>(fileBytes, headers, HttpStatus.OK);
     }
 
+
     @GetMapping("/download/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> download(@PathVariable String filename) {
@@ -52,45 +67,9 @@ public class VehicleLogoController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
-//    @GetMapping("/files")
-//    public ResponseEntity<List<VehicleLogo>> getListFiles() {
-//        List<VehicleLogo> fileInfos = vehicleLogoService.loadAll()
-//                .map(path -> {
-//                    String filename = path.getFileName().toString();
-//                    String url = MvcUriComponentsBuilder
-//                            .fromMethodName(VehicleLogoController.class, "getFile", filename).build().toString();
-//
-//                    return new VehicleLogo(filename, url);
-//                }).collect(Collectors.toList());
-//
-//        return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
-//    }
-
-
-
-//    @PostMapping("/upload")
-//    public ResponseEntity<?> saveVehicleLogo(@RequestBody CreateVehicleDetailsRequestDto vehicleDetailsRequestDto) {
-//        return ResponseEntity.ok(vehicleLogoService.saveVehicleLogo(vehicleDetailsRequestDto));
-//    }
-//
-//    @GetMapping("/download")
-//    public ResponseEntity<Set<VehicleDetailsResponseDto>> getAllVehicleLogos() {
-//        return ResponseEntity.ok(vehicleLogoService.getAllVehicleLogos());
-//    }
-//
-//    @GetMapping("/download/{vehicleLogoId}")
-//    public ResponseEntity<VehicleDetailsResponseDto> getVehicleLogoByVehicleLogoId(@PathVariable Long vehicleLogoId) {
-//        return ResponseEntity.ok(vehicleLogoService.getVehicleLogoByVehicleLogoId(vehicleLogoId));
-//    }
-//
-//    @PutMapping("/{vehicleLogoId}")
-//    public ResponseEntity<VehicleDetailsResponseDto> updateVehicleLogo(@PathVariable Long vehicleLogoId, @RequestBody UpdateVehicleDetailsRequestDto vehicleDetailsRequestDto) {
-//        return ResponseEntity.ok(vehicleLogoService.updateVehicleLogo(vehicleLogoId, vehicleDetailsRequestDto));
-//    }
-//
-//    @DeleteMapping("/{vehicleLogoId}")
-//    public ResponseEntity<Void> deleteVehicleLogo(@PathVariable Long vehicleLogoId) {
-//        vehicleLogoService.deleteVehicleLogo(vehicleLogoId);
-//        return ResponseEntity.ok().build();
-//    }
+    @DeleteMapping("/{vehicleLogoId}")
+    public ResponseEntity<Void> deleteVehicleLogo(@PathVariable Long vehicleLogoId) {
+        vehicleLogoService.deleteVehicleLogo(vehicleLogoId);
+        return ResponseEntity.ok().build();
+    }
 }

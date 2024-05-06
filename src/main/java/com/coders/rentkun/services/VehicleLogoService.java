@@ -1,20 +1,23 @@
 package com.coders.rentkun.services;
 
-import com.coders.rentkun.dtos.vehicles.responses.VehicleLogoResponseDto;
+import com.coders.rentkun.dtos.vehicles.responses.LogoResponseDto;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface VehicleLogoService {
-    VehicleLogoResponseDto save(MultipartFile file);
+    LogoResponseDto save(MultipartFile file);
+
+    List<LogoResponseDto> getLogos();
+
+    LogoResponseDto getLogoResponseById(Long vehicleLogoId);
+
+    byte[] getLogoById(Long vehicleLogoId);
 
     byte[] getLogoByFileName(String filename);
 
     Resource download(String filename);
 
-//    public Stream<Path> loadAll();
-//
-//    public void deleteAll();
-
-
-
+    void deleteVehicleLogo(Long vehicleLogoId);
 }

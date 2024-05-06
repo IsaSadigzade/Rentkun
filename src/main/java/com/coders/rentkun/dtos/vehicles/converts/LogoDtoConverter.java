@@ -1,6 +1,6 @@
 package com.coders.rentkun.dtos.vehicles.converts;
 
-import com.coders.rentkun.dtos.vehicles.responses.VehicleLogoResponseDto;
+import com.coders.rentkun.dtos.vehicles.responses.LogoResponseDto;
 import com.coders.rentkun.entities.vehicles.VehicleLogo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -28,8 +28,8 @@ public class LogoDtoConverter {
     @Value("${file.download.url}")
     private String downloadUrl;
 
-    public VehicleLogoResponseDto convertToResponse(VehicleLogo entity) {
-        return new VehicleLogoResponseDto(
+    public LogoResponseDto convertToResponse(VehicleLogo entity) {
+        return new LogoResponseDto(
                 entity.getId(),
                 entity.getName(),
                 entity.getUrl(),
