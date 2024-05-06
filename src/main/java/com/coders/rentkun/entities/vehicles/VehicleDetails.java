@@ -35,7 +35,7 @@ public class VehicleDetails {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
 
-    @OneToOne(mappedBy = "vehicleDetails",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "vehicleDetails", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private Vehicle vehicle;
 

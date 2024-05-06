@@ -17,7 +17,7 @@ public class VehicleFeature {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
+    @JoinColumn(name = "vehicle_id")
     @JsonIgnore
     private Vehicle vehicle;
 }

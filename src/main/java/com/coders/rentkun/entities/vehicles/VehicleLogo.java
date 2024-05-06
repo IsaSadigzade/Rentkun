@@ -35,10 +35,10 @@ public class VehicleLogo {
 //    @Temporal(TemporalType.DATE)
 //    private LocalDate updatedAt;
 
-    @OneToOne(mappedBy = "vehicleLogo", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn
-    @JsonIgnore
-    private Vehicle vehicle;
+//    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "vehicle_id")
+//    @JsonIgnore
+//    private Vehicle vehicle;
 
     public VehicleLogo(String name, String url) {
         this.name = name;

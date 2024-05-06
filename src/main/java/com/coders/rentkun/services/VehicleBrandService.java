@@ -59,7 +59,7 @@ import java.util.stream.Collectors;
         if (!isBrandExist(brandId)) {
             vehicleBrandRepository.deleteById(brandId);
         } else {
-            throw new BrandDoesNotExistException("Brand doesn't exist by following modelId: " + brandId);
+            throw new BrandDoesNotExistException("Brand doesn't exist by following brandId: " + brandId);
         }
     }
 

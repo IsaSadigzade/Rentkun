@@ -18,11 +18,7 @@ public class VehicleModel {
     private boolean active = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
+    @JoinColumn(name = "vehicle_brand_id")
     @JsonIgnore
     private VehicleBrand vehicleBrand;
-
-//    @OneToOne(mappedBy = "vehicleModel", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//    @JsonIgnore
-//    private Vehicle vehicle;
 }

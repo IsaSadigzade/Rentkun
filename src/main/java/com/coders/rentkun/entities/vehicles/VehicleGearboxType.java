@@ -15,8 +15,4 @@ public class VehicleGearboxType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-
-    @OneToOne(mappedBy = "vehicleGearboxType", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Vehicle vehicle;
 }

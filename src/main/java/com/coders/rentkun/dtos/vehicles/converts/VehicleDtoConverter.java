@@ -51,7 +51,7 @@ public class VehicleDtoConverter {
         );
     }
 
-    public Vehicle convertToEntity(VehicleDetails savedDetails,
+    public Vehicle convertToEntity(VehicleDetails foundDetails,
                                    VehicleBrand foundBrand,
                                    VehicleModel foundModel,
                                    VehicleType foundType,
@@ -62,7 +62,7 @@ public class VehicleDtoConverter {
 
         Vehicle entity = new Vehicle();
 
-        entity.setVehicleDetails(savedDetails);
+        entity.setVehicleDetails(foundDetails);
         entity.setVehicleBrand(foundBrand);
         entity.setVehicleModel(foundModel);
         entity.setVehicleType(foundType);

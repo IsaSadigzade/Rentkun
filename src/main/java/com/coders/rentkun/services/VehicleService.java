@@ -5,6 +5,7 @@ import com.coders.rentkun.dtos.vehicles.requests.CreateVehicleRequestByIDs;
 import com.coders.rentkun.dtos.vehicles.responses.VehicleResponseDto;
 import com.coders.rentkun.entities.vehicles.*;
 import com.coders.rentkun.repositories.VehicleRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -36,8 +37,11 @@ public class VehicleService {
         this.vehicleDetailsService = vehicleDetailsService;
     }
 
+    @Transactional
     public VehicleResponseDto saveVehicle(CreateVehicleRequestByIDs vehicleRequestDto) {
         VehicleDetails savedVehicleDetails = vehicleDetailsService.save(vehicleRequestDto.getDetailsRequest());
+
+        VehicleDetails foundDetails = vehicleDetailsService.findByVehicleDetailsId(savedVehicleDetails.getId());
         VehicleBrand foundBrand = vehicleBrandService.findBrandById(vehicleRequestDto.getBrandId());
         VehicleModel foundModel = vehicleModelService.findModelById(vehicleRequestDto.getModelId());
         VehicleType foundType = vehicleTypeService.findByVehicleTypeId(vehicleRequestDto.getVehicleTypeId());
@@ -50,7 +54,7 @@ public class VehicleService {
         return vehicleDtoConverter.convertToResponse(
                 vehicleRepository.save(
                         vehicleDtoConverter.convertToEntity(
-                                savedVehicleDetails,
+                                foundDetails,
                                 foundBrand,
                                 foundModel,
                                 foundType,
