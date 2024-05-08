@@ -1,6 +1,5 @@
 package com.coders.rentkun.dtos.vehicles.converts;
 
-import com.coders.rentkun.dtos.vehicles.requests.CreateVehicleRequestByIDs;
 import com.coders.rentkun.dtos.vehicles.responses.VehicleResponseDto;
 import com.coders.rentkun.entities.vehicles.*;
 import org.springframework.stereotype.Component;
@@ -52,30 +51,34 @@ public class VehicleDtoConverter {
     }
 
     public Vehicle convertToEntity(VehicleDetails foundDetails,
-                                   VehicleBrand foundBrand,
-                                   VehicleModel foundModel,
-                                   VehicleType foundType,
-                                   VehicleGearboxType foundGearbox,
-                                   VehicleFuelType foundFuelType,
-                                   VehicleLogo foundLogo,
-                                   Set<VehicleFeature> foundFeatures) {
+                                   Object[] objects,
+                                   Set<VehicleFeature> features) {
 
-        Vehicle entity = new Vehicle();
-
-        entity.setVehicleDetails(foundDetails);
-        entity.setVehicleBrand(foundBrand);
-        entity.setVehicleModel(foundModel);
-        entity.setVehicleType(foundType);
-        entity.setVehicleGearboxType(foundGearbox);
-        entity.setVehicleFuelType(foundFuelType);
-        entity.setVehicleLogo(foundLogo);
-        entity.setVehicleFeatures(foundFeatures);
-
-        return entity;
+        return new Vehicle(
+                foundDetails,
+                (VehicleBrand) objects[0],
+                (VehicleModel) objects[1],
+                (VehicleType) objects[2],
+                (VehicleGearboxType) objects[3],
+                (VehicleFuelType) objects[4],
+                (VehicleLogo) objects[5],
+                features
+        );
     }
 
-    public Vehicle convertToEntity(Vehicle foundVehicle, CreateVehicleRequestByIDs vehicleRequestByIDs) {
-//        foundVehicle.setName(vehicleRequestByIDs.getFuelTypeName());
+
+    public Vehicle convertToEntity(Vehicle foundVehicle,
+                                   VehicleDetails foundDetails,
+                                   Object[] objects,
+                                   Set<VehicleFeature> foundFeatures) {
+        foundVehicle.setVehicleDetails(foundDetails);
+        foundVehicle.setVehicleBrand((VehicleBrand) objects[0]);
+        foundVehicle.setVehicleModel((VehicleModel) objects[1]);
+        foundVehicle.setVehicleType((VehicleType) objects[2]);
+        foundVehicle.setVehicleGearboxType((VehicleGearboxType) objects[3]);
+        foundVehicle.setVehicleFuelType((VehicleFuelType) objects[4]);
+        foundVehicle.setVehicleLogo((VehicleLogo) objects[5]);
+        foundVehicle.setVehicleFeatures(foundFeatures);
         return foundVehicle;
     }
 }

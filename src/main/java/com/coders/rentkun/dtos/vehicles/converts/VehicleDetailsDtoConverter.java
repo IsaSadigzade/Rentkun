@@ -39,6 +39,21 @@ public class VehicleDetailsDtoConverter {
         );
     }
 
+    public VehicleDetails convertToEntity(VehicleDetailsResponseDto vehicleDetailsRequestDto) {
+        return new VehicleDetails(
+                vehicleDetailsRequestDto.getCity(),
+                vehicleDetailsRequestDto.getCountry(),
+                vehicleDetailsRequestDto.getPlateNumber(),
+                vehicleDetailsRequestDto.getNumberOfSeats(),
+                vehicleDetailsRequestDto.getDistance(),
+                vehicleDetailsRequestDto.getColor(),
+                vehicleDetailsRequestDto.getYear(),
+                vehicleDetailsRequestDto.getDescription(),
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
+    }
+
     public VehicleDetails convertToEntity(VehicleDetails foundVehicleDetails, UpdateVehicleDetailsRequestDto vehicleDetailsRequestDto) {
         foundVehicleDetails.setCity(vehicleDetailsRequestDto.getCity());
         foundVehicleDetails.setCountry(vehicleDetailsRequestDto.getCountry());

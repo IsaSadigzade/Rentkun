@@ -62,4 +62,22 @@ public class Vehicle {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "vehicle")
     private Set<VehicleImages> vehicleImages;
+
+    public Vehicle(VehicleDetails vehicleDetails,
+                   VehicleBrand vehicleBrand,
+                   VehicleModel vehicleModel,
+                   VehicleType vehicleType,
+                   VehicleGearboxType vehicleGearboxType,
+                   VehicleFuelType vehicleFuelType,
+                   VehicleLogo vehicleLogo,
+                   Set<VehicleFeature> vehicleFeatures) {
+        this.vehicleDetails = vehicleDetails;
+        this.vehicleBrand = vehicleBrand;
+        this.vehicleModel = vehicleModel;
+        this.vehicleType = vehicleType;
+        this.vehicleGearboxType = vehicleGearboxType;
+        this.vehicleFuelType = vehicleFuelType;
+        this.vehicleLogo = vehicleLogo;
+        this.vehicleFeatures = vehicleFeatures;
+    }
 }

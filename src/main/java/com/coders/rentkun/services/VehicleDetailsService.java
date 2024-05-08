@@ -4,7 +4,6 @@ import com.coders.rentkun.dtos.vehicles.converts.VehicleDetailsDtoConverter;
 import com.coders.rentkun.dtos.vehicles.requests.CreateVehicleDetailsRequestDto;
 import com.coders.rentkun.dtos.vehicles.requests.UpdateVehicleDetailsRequestDto;
 import com.coders.rentkun.dtos.vehicles.responses.VehicleDetailsResponseDto;
-import com.coders.rentkun.entities.vehicles.Vehicle;
 import com.coders.rentkun.entities.vehicles.VehicleDetails;
 import com.coders.rentkun.exception.FuelTypeNotFoundException;
 import com.coders.rentkun.exception.VehicleTypeDoesNotExistException;
