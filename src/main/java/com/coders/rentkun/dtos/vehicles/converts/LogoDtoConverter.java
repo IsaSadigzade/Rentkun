@@ -20,12 +20,12 @@ import java.util.Random;
 
 @Component
 public class LogoDtoConverter {
-    private final Path root = Paths.get("C:\\Users\\isasa\\OneDrive\\Masaüstü\\rentkun\\src\\main\\resources\\images\\vehicle_images\\logos\\");
+    private final Path logoPath = Paths.get("C:\\Users\\isasa\\OneDrive\\Masaüstü\\rentkun\\src\\main\\resources\\images\\vehicle_images\\logos\\");
 
-    @Value("${file.upload.url}")
+    @Value("${logo.upload.url}")
     private String uploadUrl;
 
-    @Value("${file.download.url}")
+    @Value("${logo.download.url}")
     private String downloadUrl;
 
     public LogoResponseDto convertToResponse(VehicleLogo entity) {
@@ -44,7 +44,7 @@ public class LogoDtoConverter {
         String updatedContentType = contentType.substring(contentType.lastIndexOf('/') + 1);
 
         String changedFileName = "logo_" + random.nextInt() + "." + updatedContentType;
-        Path folderPath = Paths.get(root + "\\" + LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        Path folderPath = Paths.get(logoPath + "\\" + LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
         if (!Files.exists(folderPath)) {
             Files.createDirectories(folderPath);
@@ -68,7 +68,7 @@ public class LogoDtoConverter {
     }
 
     public Resource convertEntityToResource(VehicleLogo foundLogo) {
-        Path file = root.resolve(foundLogo.getFilePath());
+        Path file = logoPath.resolve(foundLogo.getFilePath());
         try {
             return new UrlResource(file.toUri());
         } catch (MalformedURLException e) {

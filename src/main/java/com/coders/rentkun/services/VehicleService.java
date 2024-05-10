@@ -47,7 +47,6 @@ public class VehicleService {
         VehicleDetails foundDetails = vehicleDetailsService.findByVehicleDetailsId(savedVehicleDetails.getId());
         Object[] objects = findAllDetailsOfVehicle(vehicleRequestDto);
         Set<VehicleFeature> foundFeatures = vehicleFeaturesService.findFeaturesByIds(vehicleRequestDto.getFeatureIds());
-
         return vehicleDtoConverter.convertToResponse(
                 vehicleRepository.save(
                         vehicleDtoConverter.convertToEntity(

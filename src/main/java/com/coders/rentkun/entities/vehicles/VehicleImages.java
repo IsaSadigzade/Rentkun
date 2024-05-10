@@ -1,13 +1,11 @@
 package com.coders.rentkun.entities.vehicles;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -24,20 +22,28 @@ public class VehicleImages {
 
     private String name;
     private String type;
-
-    @ElementCollection
-    private Set<String> filePaths;
+    private String url;
+    private String downloadUrl;
+    private String filePath;
 
     @CreationTimestamp
     @Temporal(TemporalType.DATE)
     private LocalDate createdAt;
 
-    @UpdateTimestamp
-    @Temporal(TemporalType.DATE)
-    private LocalDate updatedAt;
+//    @ElementCollection
+//    private Set<String> filePaths;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vehicle_id")
-    @JsonIgnore
-    private Vehicle vehicle;
+//    @UpdateTimestamp
+//    @Temporal(TemporalType.DATE)
+//    private LocalDate updatedAt;
+
+    @ManyToMany(mappedBy = "vehicleImages")
+    private Set<Vehicle> vehicles;
+
+    public VehicleImages(Long id, String name, String url, String downloadUrl) {
+        this.id = id;
+        this.name = name;
+        this.url = url;
+        this.downloadUrl = downloadUrl;
+    }
 }

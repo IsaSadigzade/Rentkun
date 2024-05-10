@@ -60,7 +60,12 @@ public class Vehicle {
     )
     private Set<VehicleFeature> vehicleFeatures;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "vehicle")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "vehicle_images_mapping",
+            joinColumns = @JoinColumn(name = "vehicle_id"),
+            inverseJoinColumns = @JoinColumn(name = "vehicle_images_id")
+    )
     private Set<VehicleImages> vehicleImages;
 
     public Vehicle(VehicleDetails vehicleDetails,
