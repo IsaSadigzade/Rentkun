@@ -1,6 +1,6 @@
 package com.coders.rentkun.security;
 
-import com.coders.rentkun.services.JwtUserDetailsService;
+import com.coders.rentkun.services.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,19 +18,13 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private JwtTokenProvider jwtTokenProvider;
-    private JwtUserDetailsService userService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final UserService userService;
 
-    public JwtAuthenticationFilter() {
-
-    }
-
-    public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider, JwtUserDetailsService userService) {
+    public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider, UserService userService) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;
     }
-
-
 
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request,

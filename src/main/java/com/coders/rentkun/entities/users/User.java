@@ -49,9 +49,10 @@ public class User implements UserDetails {
     @JoinColumn
     private UserImage userImage;
 
-    public User(String email, String password, LocalDateTime createdAt, LocalDateTime updatedAt, UserInfos userInfos) {
+    public User(String email, String password, Role role, LocalDateTime createdAt, LocalDateTime updatedAt, UserInfos userInfos) {
         this.email = email;
         this.password = password;
+        this.role = role;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.userInfos = userInfos;
@@ -59,31 +60,31 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return List.of(role);
     }
 
     @Override
     public String getUsername() {
-        return "";
+        return this.email;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

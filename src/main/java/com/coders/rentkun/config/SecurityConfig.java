@@ -3,10 +3,11 @@ package com.coders.rentkun.config;
 import com.coders.rentkun.security.JwtAuthenticationEntryPoint;
 import com.coders.rentkun.security.JwtAuthenticationFilter;
 import com.coders.rentkun.security.JwtTokenProvider;
-import com.coders.rentkun.services.JwtUserDetailsService;
+import com.coders.rentkun.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -31,13 +32,13 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
     private final JwtAuthenticationEntryPoint handler;
     private final JwtTokenProvider jwtTokenProvider;
+    private final UserService userService;
 
     @Autowired
-    private JwtUserDetailsService jwtUserDetailsService;
-
-    public SecurityConfig(JwtAuthenticationEntryPoint handler, JwtTokenProvider jwtTokenProvider) {
+    public SecurityConfig(JwtAuthenticationEntryPoint handler, JwtTokenProvider jwtTokenProvider, @Lazy UserService userService) {
         this.handler = handler;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.userService = userService;
     }
 
     @Bean
@@ -61,14 +62,14 @@ public class SecurityConfig {
     @Bean
     public AuthenticationProvider jwtAuthenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService(jwtUserDetailsService);
+        daoAuthenticationProvider.setUserDetailsService(userService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return daoAuthenticationProvider;
     }
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtTokenProvider, jwtUserDetailsService);
+        return new JwtAuthenticationFilter(jwtTokenProvider, userService);
     }
 
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
@@ -80,10 +81,6 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-//    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-//        authenticationManagerBuilder.userDetailsService(userService).passwordEncoder(passwordEncoder());
-//    }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

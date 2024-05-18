@@ -23,6 +23,8 @@ public class UserImage {
 
     private String name;
     private String type;
+    private String url;
+    private String downloadUrl;
     private String filePath;
 
     @CreationTimestamp
@@ -36,4 +38,11 @@ public class UserImage {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn
     private User user;
+
+    public UserImage(Long id, String name, String url, String downloadUrl) {
+        this.id = id;
+        this.name = name;
+        this.url = url;
+        this.downloadUrl = downloadUrl;
+    }
 }
