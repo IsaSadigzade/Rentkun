@@ -2,13 +2,20 @@ package com.coders.rentkun.controllers;
 
 import com.coders.rentkun.core.utilities.results.DataResult;
 import com.coders.rentkun.core.utilities.results.Result;
+import com.coders.rentkun.core.utilities.results.SuccessDataResult;
+import com.coders.rentkun.core.utilities.results.SuccessResult;
 import com.coders.rentkun.dtos.users.requests.*;
 import com.coders.rentkun.dtos.users.responses.CurrentUserResponseDto;
+import com.coders.rentkun.security.JwtTokenProvider;
 import com.coders.rentkun.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,20 +27,28 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
         this.userService = userService;
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @PostMapping("/register")
-    public Result registerUser(@RequestBody UserRegisterRequestDto userRegisterRequestDto) {
-        return userService.registerUser(userRegisterRequestDto);
+    public ResponseEntity<DataResult<String>> registerUser(@RequestBody UserRegisterRequestDto userRegisterRequestDto) {
+        userService.registerUser(userRegisterRequestDto);
+        return ResponseEntity.ok(new SuccessDataResult<>("User registered successfully"));
     }
 
     @PostMapping("/login")
-    public Result loginUser(@RequestBody UserLoginRequestDto userLoginRequestDto) {
-        return userService.loginUser(userLoginRequestDto);
+    public String loginUser(@RequestBody UserLoginRequestDto userLoginRequestDto) {
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userLoginRequestDto.getEmail(), userLoginRequestDto.getPassword());
+        Authentication authentication = authenticationManager.authenticate(authToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return jwtTokenProvider.generateToken(authentication);
     }
 
     @GetMapping

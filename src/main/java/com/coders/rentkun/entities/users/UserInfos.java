@@ -1,6 +1,6 @@
 package com.coders.rentkun.entities.users;
 
-import com.coders.rentkun.enums.users.Gender;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class UserDetails {
+public class UserInfos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -40,7 +40,19 @@ public class UserDetails {
     @Temporal(TemporalType.DATE)
     private LocalDate updatedAt;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn
+    @OneToOne(mappedBy = "userInfos", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private User user;
+
+    public UserInfos(String firstName, String lastName, String phoneNumber, String gender, String cityAndZipCode, String location, LocalDate dateOfBirth, LocalDate createdAt, LocalDate updatedAt) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.gender = gender;
+        this.cityAndZipCode = cityAndZipCode;
+        this.location = location;
+        this.dateOfBirth = dateOfBirth;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 }

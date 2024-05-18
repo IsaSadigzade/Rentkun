@@ -1,15 +1,21 @@
 package com.coders.rentkun.services;
 
 import com.coders.rentkun.core.utilities.results.*;
+import com.coders.rentkun.dtos.users.converts.UserDtoConverter;
 import com.coders.rentkun.dtos.users.requests.*;
 import com.coders.rentkun.dtos.users.responses.CurrentUserResponseDto;
 import com.coders.rentkun.entities.users.User;
-import com.coders.rentkun.entities.users.UserDetails;
 import com.coders.rentkun.entities.users.UserImage;
-import com.coders.rentkun.repositories.UserDetailsRepository;
+import com.coders.rentkun.entities.users.UserInfos;
 import com.coders.rentkun.repositories.UserImageRepository;
+import com.coders.rentkun.repositories.UserInfosRepository;
 import com.coders.rentkun.repositories.UserRepository;
+import com.coders.rentkun.security.JwtTokenProvider;
 import jakarta.transaction.Transactional;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,56 +31,51 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class UserService{
 
     private final UserRepository userRepository;
-    private final UserDetailsRepository userDetailsRepository;
+    private final UserInfosRepository userInfosRepository;
     private final UserImageRepository userImageRepository;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final AuthenticationManager authenticationManager;
+    private final UserInfosService userInfosService;
+    private final UserDtoConverter userDtoConverter;
 
-    public UserService(UserRepository userRepository, UserDetailsRepository userDetailsRepository, UserImageRepository userImageRepository) {
+    public UserService(UserRepository userRepository, UserInfosRepository userInfosRepository, UserImageRepository userImageRepository, JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager, UserInfosService userInfosService, UserDtoConverter userDtoConverter) {
         this.userRepository = userRepository;
-        this.userDetailsRepository = userDetailsRepository;
+        this.userInfosRepository = userInfosRepository;
         this.userImageRepository = userImageRepository;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.authenticationManager = authenticationManager;
+        this.userInfosService = userInfosService;
+        this.userDtoConverter = userDtoConverter;
     }
+
+//    @Override
+//    public User loadUserByUsername(String username) throws UsernameNotFoundException {
+//        return findUserByEmail(username);
+//    }
 
     @Transactional
-    public Result registerUser(UserRegisterRequestDto userRegisterRequestDto) {
+    public DataResult<String> registerUser(UserRegisterRequestDto userRegisterRequestDto) {
         if (!userRegisterRequestDto.getPassword().equals(userRegisterRequestDto.getConfirmPassword())) {
-            return new ErrorResult("Password and confirmation password don't matching.");
+            return new ErrorDataResult<>("Password and confirmation password don't matching.");
         }
-        User user = new User();
-        user.setEmail(userRegisterRequestDto.getEmail());
-        user.setPassword(userRegisterRequestDto.getPassword());
 
-        UserDetails userDetails = new UserDetails();
-        userDetails.setFirstName(userRegisterRequestDto.getFirstName());
-        userDetails.setLastName(userRegisterRequestDto.getLastName());
-//        userDetails.setEmail(userRegisterRequestDto.getEmail());
-        userDetails.setPhoneNumber(userRegisterRequestDto.getPhoneNumber());
-        userDetails.setGender(userRegisterRequestDto.getGender());
-        userDetails.setCityAndZipCode(userRegisterRequestDto.getCityAndZipCode());
-        userDetails.setLocation(userRegisterRequestDto.getLocation());
-        userDetails.setDateOfBirth(userRegisterRequestDto.getBirthDate());
-        userDetails.setUser(user);
-        user.setUserDetails(userDetails);
+        UserInfos savedUserInfos = userInfosService.save(userRegisterRequestDto.getUserDetails());
+        UserInfos foundUserInfos = userInfosService.findByUserId(savedUserInfos.getId());
 
-        userDetailsRepository.save(userDetails);
-//        userImageRepository.save(userImage);
-        userRepository.save(user);
+        userRepository.save(
+                userDtoConverter.convertToEntity(userRegisterRequestDto, foundUserInfos)
+        );
 
-        return new SuccessResult("User registered successfully");
-    }
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(userRegisterRequestDto.getEmail(), userRegisterRequestDto.getPassword())
+        );
 
+        jwtTokenProvider.generateToken(authentication);
 
-    public DataResult<List<CurrentUserResponseDto>> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        List<CurrentUserResponseDto> foundUsers = new ArrayList<>();
-        for (User user : users) {
-            CurrentUserResponseDto currentUserResponseDto = entityToResponse(user);
-//            currentUserResponseDto.setImage(downloadImageFromFileSystem(user.getUserImage().getId()));
-            foundUsers.add(currentUserResponseDto);
-        }
-        return new SuccessDataResult<>(foundUsers, "Data listed successfully.");
+        return new SuccessDataResult<>("User registered successfully");
     }
 
     public Result loginUser(UserLoginRequestDto userLoginRequestDto) {
@@ -87,7 +88,24 @@ public class UserService {
             return new ErrorResult("Incorrect email or password.");
         }
 
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(email, password)
+        );
+
+        jwtTokenProvider.generateToken(authentication);
+
         return new SuccessResult("User logged in successfully.");
+    }
+
+    public DataResult<List<CurrentUserResponseDto>> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        List<CurrentUserResponseDto> foundUsers = new ArrayList<>();
+        for (User user : users) {
+            CurrentUserResponseDto currentUserResponseDto = entityToResponse(user);
+//            currentUserResponseDto.setImage(downloadImageFromFileSystem(user.getUserImage().getId()));
+            foundUsers.add(currentUserResponseDto);
+        }
+        return new SuccessDataResult<>(foundUsers, "Data listed successfully.");
     }
 
     public Result updatePassword(Long userId, UserPasswordUpdateRequestDto userPasswordUpdateRequestDto) {
@@ -123,22 +141,22 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            Optional<UserDetails> optionalUserDetails = userDetailsRepository.findById(user.getUserDetails().getId());
+            Optional<UserInfos> optionalUserDetails = userInfosRepository.findById(user.getUserInfos().getId());
 //            Optional<UserImage> optionalUserImage = userImageRepository.findByFeatureId(user.getUserImage().getId());
             if (optionalUserDetails.isPresent()) {
-                UserDetails userDetails = optionalUserDetails.get();
-                userDetails.setFirstName(userUpdateRequestDto.getFirstName());
-                userDetails.setLastName(userUpdateRequestDto.getLastName());
-//                userDetails.setEmail(userUpdateRequestDto.getEmail());
-                userDetails.setPhoneNumber(userUpdateRequestDto.getPhoneNumber());
-                userDetails.setGender(userUpdateRequestDto.getGender());
-                userDetails.setCityAndZipCode(userUpdateRequestDto.getCityAndZipCode());
-                userDetails.setLocation(userUpdateRequestDto.getLocation());
-                userDetails.setDateOfBirth(userUpdateRequestDto.getBirthDate());
-                userDetails.setUser(user);
-                userDetailsRepository.save(userDetails);
+                UserInfos userInfos = optionalUserDetails.get();
+                userInfos.setFirstName(userUpdateRequestDto.getFirstName());
+                userInfos.setLastName(userUpdateRequestDto.getLastName());
+//                userInfos.setEmail(userUpdateRequestDto.getEmail());
+                userInfos.setPhoneNumber(userUpdateRequestDto.getPhoneNumber());
+                userInfos.setGender(userUpdateRequestDto.getGender());
+                userInfos.setCityAndZipCode(userUpdateRequestDto.getCityAndZipCode());
+                userInfos.setLocation(userUpdateRequestDto.getLocation());
+                userInfos.setDateOfBirth(userUpdateRequestDto.getBirthDate());
+//                userInfos.setUser(user);
+                userInfosRepository.save(userInfos);
             } else {
-                return new ErrorResult("UserDetails not found");
+                return new ErrorResult("UserInfos not found");
             }
 
             user.setEmail(userUpdateRequestDto.getEmail());
@@ -164,14 +182,14 @@ public class UserService {
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             user.setEmail(userEmailAndPhoneNumberUpdateRequestDto.getEmail());
-            Optional<UserDetails> optionalUserDetails = userDetailsRepository.findById(user.getUserDetails().getId());
+            Optional<UserInfos> optionalUserDetails = userInfosRepository.findById(user.getUserInfos().getId());
             if (optionalUserDetails.isPresent()) {
-                UserDetails userDetails = optionalUserDetails.get();
-//                userDetails.setEmail(userEmailAndPhoneNumberUpdateRequestDto.getEmail());
-                userDetails.setPhoneNumber(userEmailAndPhoneNumberUpdateRequestDto.getPhoneNumber());
-                userDetailsRepository.save(userDetails);
+                UserInfos userInfos = optionalUserDetails.get();
+//                userInfos.setEmail(userEmailAndPhoneNumberUpdateRequestDto.getEmail());
+                userInfos.setPhoneNumber(userEmailAndPhoneNumberUpdateRequestDto.getPhoneNumber());
+                userInfosRepository.save(userInfos);
             } else {
-                return new ErrorResult("UserDetails not found");
+                return new ErrorResult("UserInfos not found");
             }
             userRepository.save(user);
             return new SuccessResult("User updated successfully");
@@ -185,7 +203,7 @@ public class UserService {
             User user = optionalUser.get();
             String fileName = file.getOriginalFilename();
             assert fileName != null;
-            String newFileName = fileName.replaceAll(fileName, user.getUserDetails().getFirstName() + "_" + user.getUserDetails().getLastName()) + ".png";
+            String newFileName = fileName.replaceAll(fileName, user.getUserInfos().getFirstName() + "_" + user.getUserInfos().getLastName()) + ".png";
             String FOLDER_PATH = "C:\\Users\\isasa\\OneDrive\\Masaüstü\\rentkun\\src\\main\\resources\\images\\user_profile_photos\\";
             String folderPath = FOLDER_PATH + "\\" + LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
             try {
@@ -240,18 +258,26 @@ public class UserService {
         return images;
     }
 
-    private static CurrentUserResponseDto
-    entityToResponse(User user) {
+    protected User findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    protected User findUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
+    private static CurrentUserResponseDto entityToResponse(User user) {
         CurrentUserResponseDto currentUserDto = new CurrentUserResponseDto();
         currentUserDto.setId(user.getId());
         currentUserDto.setEmail(user.getEmail());
-        currentUserDto.setFirstName(user.getUserDetails().getFirstName());
-        currentUserDto.setLastName(user.getUserDetails().getLastName());
-        currentUserDto.setPhoneNumber(user.getUserDetails().getPhoneNumber());
-        currentUserDto.setGender(user.getUserDetails().getGender());
-        currentUserDto.setCityAndZipCode(user.getUserDetails().getCityAndZipCode());
-        currentUserDto.setLocation(user.getUserDetails().getLocation());
-        currentUserDto.setDateOfBirth(user.getUserDetails().getDateOfBirth());
+        currentUserDto.setFirstName(user.getUserInfos().getFirstName());
+        currentUserDto.setLastName(user.getUserInfos().getLastName());
+        currentUserDto.setPhoneNumber(user.getUserInfos().getPhoneNumber());
+        currentUserDto.setGender(user.getUserInfos().getGender());
+        currentUserDto.setCityAndZipCode(user.getUserInfos().getCityAndZipCode());
+        currentUserDto.setLocation(user.getUserInfos().getLocation());
+        currentUserDto.setDateOfBirth(user.getUserInfos().getDateOfBirth());
         return currentUserDto;
     }
 }

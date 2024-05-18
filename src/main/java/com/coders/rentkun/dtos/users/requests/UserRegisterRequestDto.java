@@ -11,14 +11,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserRegisterRequestDto {
-    private String firstName;
-    private String lastName;
     private String email;
     private String password;
     private String confirmPassword;
-    private String phoneNumber;
-    private String gender;
-    private String cityAndZipCode;
-    private String location;
-    private LocalDate birthDate;
+    private CreateUserDetailsDto userDetails;
 }
