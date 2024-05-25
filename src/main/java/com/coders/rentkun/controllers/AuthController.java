@@ -1,13 +1,17 @@
 package com.coders.rentkun.controllers;
 
-import com.coders.rentkun.dto.AuthResponse;
-import com.coders.rentkun.dto.LoginRequest;
-import com.coders.rentkun.dto.RegisterRequest;
+import com.coders.rentkun.core.utilities.results.DataResult;
+import com.coders.rentkun.core.utilities.results.Result;
+import com.coders.rentkun.core.utilities.results.SuccessDataResult;
+import com.coders.rentkun.dtos.users.requests.UserLoginRequestDto;
+import com.coders.rentkun.dtos.users.requests.UserRegisterRequestDto;
+import com.coders.rentkun.dtos.users.responses.CurrentUserResponseDto;
 import com.coders.rentkun.services.AuthService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -20,19 +24,13 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
-        String token = authService.register(request);
-        return ResponseEntity.ok(new AuthResponse(token));
+    public ResponseEntity<CurrentUserResponseDto> register(@RequestBody UserRegisterRequestDto request) {
+        return ResponseEntity.ok(authService.register(request));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
-        try {
-            String token = authService.login(request.getEmail(), request.getPassword());
-            return ResponseEntity.ok(new AuthResponse(token));
-        } catch (BadCredentialsException e) {
-            return ResponseEntity.status(401).build();
-        }
+    public ResponseEntity<String> login(@RequestBody UserLoginRequestDto loginRequest) {
+        return ResponseEntity.ok(authService.login(loginRequest));
     }
 }
 

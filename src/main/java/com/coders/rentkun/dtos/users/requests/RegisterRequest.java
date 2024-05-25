@@ -1,4 +1,4 @@
-package com.coders.rentkun.dto;
+package com.coders.rentkun.dtos.users.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

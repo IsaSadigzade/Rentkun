@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -47,10 +48,19 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .exceptionHandling(x -> x.authenticationEntryPoint(handler))
-                .authorizeHttpRequests(x -> x
-                        .requestMatchers("/api/auth/**", "/v3/api-docs/**", "/swagger-resources/**", "/swagger-ui.html", "/webjars/**", "/swagger-ui/**")
+                .formLogin(form -> form
+                        .loginProcessingUrl("/login")
                         .permitAll()
-                        .requestMatchers("/users/register").permitAll()
+                        .successHandler((request, response, authentication) -> {
+                            response.setStatus(HttpStatus.OK.value());
+                        })
+                        .failureHandler((request, response, exception) -> {
+                            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                        })
+                )
+                .authorizeHttpRequests(x -> x
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(permitSwagger).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -98,4 +108,13 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
+    public static String[] permitSwagger = {
+            "v3/api-docs/**",
+            "v3/api-docs.yaml",
+            "swagger-ui/**",
+            "swagger-ui.html",
+            "/swagger-resources/**",
+            "/webjars/**"
+    };
 }

@@ -1,16 +1,17 @@
 package com.coders.rentkun.dtos.users.converts;
 
-import com.coders.rentkun.dtos.users.requests.UserEmailAndPhoneNumberUpdateRequestDto;
 import com.coders.rentkun.dtos.users.requests.UserRegisterRequestDto;
 import com.coders.rentkun.dtos.users.responses.CurrentUserResponseDto;
 import com.coders.rentkun.dtos.users.responses.UpdatedEmailAndPhoneNumberResponseDto;
-import com.coders.rentkun.entities.users.Role;
-import com.coders.rentkun.entities.users.User;
-import com.coders.rentkun.entities.users.UserInfos;
+import com.coders.rentkun.entities.users.*;
+import com.coders.rentkun.entities.users.enums.EAuthority;
+import com.coders.rentkun.entities.users.enums.ERole;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public class UserDtoConverter {
@@ -21,13 +22,38 @@ public class UserDtoConverter {
     }
 
     public User convertToEntity(UserRegisterRequestDto requestDto, UserInfos foundUserInfos) {
+        Authority createAuthority = Authority.builder()
+                .name(EAuthority.CREATE)
+                .build();
+        Authority readAuthority = Authority.builder()
+                .name(EAuthority.READ)
+                .build();
+        Authority updateAuthority = Authority.builder()
+                .name(EAuthority.UPDATE)
+                .build();
+        Authority deleteAuthority = Authority.builder()
+                .name(EAuthority.DELETE)
+                .build();
+        Set<Authority> authorities = new HashSet<>();
+        authorities.add(createAuthority);
+        authorities.add(readAuthority);
+        authorities.add(updateAuthority);
+        authorities.add(deleteAuthority);
+
+        Role userRole = Role.builder()
+                .name(ERole.ROLE_USER)
+                .build();
+
+        Set<Role> roles = new HashSet<>();
+        roles.add(userRole);
         return new User(
                 requestDto.getEmail(),
                 passwordEncoder.encode(requestDto.getPassword()),
-                Role.ROLE_USER,
+                roles,
+                authorities,
+                foundUserInfos,
                 LocalDateTime.now(),
-                LocalDateTime.now(),
-                foundUserInfos
+                LocalDateTime.now()
         );
     }
 

@@ -3,14 +3,13 @@ package com.coders.rentkun.controllers;
 import com.coders.rentkun.core.utilities.results.DataResult;
 import com.coders.rentkun.core.utilities.results.Result;
 import com.coders.rentkun.core.utilities.results.SuccessDataResult;
-import com.coders.rentkun.dtos.users.requests.*;
+import com.coders.rentkun.dtos.users.requests.UserDetailsRequestDto;
+import com.coders.rentkun.dtos.users.requests.UserEmailAndPhoneNumberUpdateRequestDto;
+import com.coders.rentkun.dtos.users.requests.UserPasswordUpdateRequestDto;
 import com.coders.rentkun.dtos.users.responses.CurrentUserResponseDto;
 import com.coders.rentkun.dtos.users.responses.UpdatedEmailAndPhoneNumberResponseDto;
-import com.coders.rentkun.security.JwtTokenProvider;
 import com.coders.rentkun.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,24 +20,9 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final JwtTokenProvider jwtTokenProvider;
 
-    @Autowired
-    public UserController(UserService userService, JwtTokenProvider jwtTokenProvider) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<DataResult<String>> registerUser(@RequestBody UserRegisterRequestDto userRegisterRequestDto) {
-        userService.registerUser(userRegisterRequestDto);
-        return ResponseEntity.ok(new SuccessDataResult<>("User registered successfully"));
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<Result> loginUser(@RequestBody UserLoginRequestDto userLoginRequestDto) {
-        SecurityContextHolder.getContext().setAuthentication(userService.loginUser(userLoginRequestDto));
-        return ResponseEntity.ok(new SuccessDataResult<>(jwtTokenProvider.generateToken(userService.loginUser(userLoginRequestDto))));
     }
 
     @GetMapping

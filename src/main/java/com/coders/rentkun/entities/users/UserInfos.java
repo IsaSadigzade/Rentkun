@@ -20,10 +20,10 @@ public class UserInfos {
     private Long id;
     private String firstName;
     private String lastName;
-//    @Column(unique = true)
-//    private String email;
+
     @Column(unique = true)
     private String phoneNumber;
+    //TODO: Gender will enum. Service will check String and change to enum type
 //    @Enumerated(EnumType.STRING)
     private String gender;
     private String cityAndZipCode;

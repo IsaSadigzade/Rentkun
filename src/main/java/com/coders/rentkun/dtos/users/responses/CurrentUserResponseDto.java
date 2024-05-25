@@ -21,4 +21,17 @@ public class CurrentUserResponseDto {
     private String location;
     private LocalDate dateOfBirth;
 //    private byte[] image;
+    private String token;
+
+    public CurrentUserResponseDto(Long id, String firstName, String lastName, String phoneNumber, String email, String gender, String cityAndZipCode, String location, LocalDate dateOfBirth) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.gender = gender;
+        this.cityAndZipCode = cityAndZipCode;
+        this.location = location;
+        this.dateOfBirth = dateOfBirth;
+    }
 }

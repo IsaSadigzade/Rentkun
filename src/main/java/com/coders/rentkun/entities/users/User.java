@@ -12,7 +12,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Data
 @AllArgsConstructor
@@ -26,17 +28,26 @@ public class User implements UserDetails {
 
     @Column(nullable = false, unique = true)
     private String email;
+
+    @JsonIgnore
     private String password;
 
-//    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @JoinTable(name = "authorities", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "role", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    @JoinTable(name = "user_authorities",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id"))
+    private Set<Authority> authorities;
 
     @CreationTimestamp
     @JsonIgnore
     private LocalDateTime createdAt;
+
     @UpdateTimestamp
     @JsonIgnore
     private LocalDateTime updatedAt;
@@ -49,18 +60,22 @@ public class User implements UserDetails {
     @JoinColumn
     private UserImage userImage;
 
-    public User(String email, String password, Role role, LocalDateTime createdAt, LocalDateTime updatedAt, UserInfos userInfos) {
+    public User(String email, String password, Set<Role> roles, Set<Authority> authorities, UserInfos userInfos, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.email = email;
         this.password = password;
-        this.role = role;
+        this.roles = roles;
+        this.authorities = authorities;
+        this.userInfos = userInfos;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.userInfos = userInfos;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(role);
+        return Stream.concat(
+                roles.stream().map(role -> (GrantedAuthority) role),
+                authorities.stream().map(authority -> (GrantedAuthority) authority)
+        ).collect(Collectors.toSet());
     }
 
     @Override
