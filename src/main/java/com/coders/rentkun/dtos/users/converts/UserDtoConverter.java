@@ -3,9 +3,12 @@ package com.coders.rentkun.dtos.users.converts;
 import com.coders.rentkun.dtos.users.requests.UserRegisterRequestDto;
 import com.coders.rentkun.dtos.users.responses.CurrentUserResponseDto;
 import com.coders.rentkun.dtos.users.responses.UpdatedEmailAndPhoneNumberResponseDto;
-import com.coders.rentkun.entities.users.*;
-import com.coders.rentkun.entities.users.enums.EAuthority;
-import com.coders.rentkun.entities.users.enums.ERole;
+import com.coders.rentkun.entities.users.Authority;
+import com.coders.rentkun.entities.users.Role;
+import com.coders.rentkun.entities.users.User;
+import com.coders.rentkun.entities.users.UserInfos;
+import com.coders.rentkun.services.AuthorityService;
+import com.coders.rentkun.services.RoleService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -16,45 +19,36 @@ import java.util.Set;
 @Component
 public class UserDtoConverter {
     private final PasswordEncoder passwordEncoder;
+    private final AuthorityService authorityService;
+    private final RoleService roleService;
 
-    public UserDtoConverter(PasswordEncoder passwordEncoder) {
+    public UserDtoConverter(PasswordEncoder passwordEncoder, AuthorityService authorityService, RoleService roleService) {
         this.passwordEncoder = passwordEncoder;
+        this.authorityService = authorityService;
+        this.roleService = roleService;
     }
 
     public User convertToEntity(UserRegisterRequestDto requestDto, UserInfos foundUserInfos) {
-        Authority createAuthority = Authority.builder()
-                .name(EAuthority.CREATE)
-                .build();
-        Authority readAuthority = Authority.builder()
-                .name(EAuthority.READ)
-                .build();
-        Authority updateAuthority = Authority.builder()
-                .name(EAuthority.UPDATE)
-                .build();
-        Authority deleteAuthority = Authority.builder()
-                .name(EAuthority.DELETE)
-                .build();
         Set<Authority> authorities = new HashSet<>();
-        authorities.add(createAuthority);
-        authorities.add(readAuthority);
-        authorities.add(updateAuthority);
-        authorities.add(deleteAuthority);
-
-        Role userRole = Role.builder()
-                .name(ERole.ROLE_USER)
-                .build();
+        authorities.add(authorityService.findByName("CREATE"));
+        authorities.add(authorityService.findByName("READ"));
+        authorities.add(authorityService.findByName("UPDATE"));
+        authorities.add(authorityService.findByName("DELETE"));
 
         Set<Role> roles = new HashSet<>();
-        roles.add(userRole);
-        return new User(
+        roles.add(roleService.getRole("ROLE_USER"));
+
+        User user = new User(
                 requestDto.getEmail(),
                 passwordEncoder.encode(requestDto.getPassword()),
-                roles,
-                authorities,
                 foundUserInfos,
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
+        user.setRoles(roles);
+        user.setAuthorities(authorities);
+
+        return user;
     }
 
     public User convertToEntity(User foundUser, UserInfos foundUserInfos) {

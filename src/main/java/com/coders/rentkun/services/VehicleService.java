@@ -58,6 +58,21 @@ public class VehicleService {
         );
     }
 
+    @Transactional
+    public Vehicle saveForAdvertVehicle(CreateVehicleRequestDto vehicleRequestDto) {
+        VehicleDetails savedVehicleDetails = vehicleDetailsService.save(vehicleRequestDto.getDetailsRequest());
+        VehicleDetails foundDetails = vehicleDetailsService.findByVehicleDetailsId(savedVehicleDetails.getId());
+        Object[] objects = findAllDetailsOfVehicle(vehicleRequestDto);
+        Set<VehicleFeature> foundFeatures = vehicleFeaturesService.findFeaturesByIds(vehicleRequestDto.getFeatureIds());
+        return vehicleRepository.save(
+                vehicleDtoConverter.convertToEntity(
+                        foundDetails,
+                        objects,
+                        foundFeatures
+                )
+        );
+    }
+
     public List<VehicleResponseDto> getAllVehicles() {
         return vehicleRepository.findAll().stream()
                 .map(vehicleDtoConverter::convertToResponse)

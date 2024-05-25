@@ -8,13 +8,14 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Data
 @AllArgsConstructor
@@ -32,13 +33,13 @@ public class User implements UserDetails {
     @JsonIgnore
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     @JoinTable(name = "user_authorities",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "authority_id"))
@@ -60,11 +61,9 @@ public class User implements UserDetails {
     @JoinColumn
     private UserImage userImage;
 
-    public User(String email, String password, Set<Role> roles, Set<Authority> authorities, UserInfos userInfos, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public User(String email, String password, UserInfos userInfos, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.email = email;
         this.password = password;
-        this.roles = roles;
-        this.authorities = authorities;
         this.userInfos = userInfos;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -72,11 +71,29 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Stream.concat(
-                roles.stream().map(role -> (GrantedAuthority) role),
-                authorities.stream().map(authority -> (GrantedAuthority) authority)
-        ).collect(Collectors.toSet());
+        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+
+        // Add roles
+        grantedAuthorities.addAll(roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
+                .collect(Collectors.toSet()));
+
+        // Add authorities
+        grantedAuthorities.addAll(authorities.stream()
+                .map(authority -> new SimpleGrantedAuthority(authority.getName().name()))
+                .collect(Collectors.toSet()));
+
+        return grantedAuthorities;
     }
+
+
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return Stream.concat(
+//                roles.stream().map(role -> (GrantedAuthority) role),
+//                authorities.stream().map(authority -> (GrantedAuthority) authority)
+//        ).collect(Collectors.toSet());
+//    }
 
     @Override
     public String getUsername() {

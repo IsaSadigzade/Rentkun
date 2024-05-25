@@ -25,7 +25,7 @@ public class Advertiser {
     private boolean vehicleActive;
     private BigDecimal price;
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn
     private User user;
 
@@ -40,6 +40,4 @@ public class Advertiser {
     @UpdateTimestamp
     @Temporal(value = TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
-
-
 }
