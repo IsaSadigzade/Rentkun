@@ -1,8 +1,5 @@
 package com.coders.rentkun.controllers;
 
-import com.coders.rentkun.core.utilities.results.DataResult;
-import com.coders.rentkun.core.utilities.results.Result;
-import com.coders.rentkun.core.utilities.results.SuccessDataResult;
 import com.coders.rentkun.dtos.users.requests.UserLoginRequestDto;
 import com.coders.rentkun.dtos.users.requests.UserRegisterRequestDto;
 import com.coders.rentkun.dtos.users.responses.CurrentUserResponseDto;

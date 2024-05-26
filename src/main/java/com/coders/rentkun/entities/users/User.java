@@ -1,5 +1,6 @@
 package com.coders.rentkun.entities.users;
 
+import com.coders.rentkun.entities.common.Advertiser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -61,6 +63,9 @@ public class User implements UserDetails {
     @JoinColumn
     private UserImage userImage;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Advertiser> advertiser;
+
     public User(String email, String password, UserInfos userInfos, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.email = email;
         this.password = password;
@@ -73,27 +78,16 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 
-        // Add roles
         grantedAuthorities.addAll(roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toSet()));
 
-        // Add authorities
         grantedAuthorities.addAll(authorities.stream()
                 .map(authority -> new SimpleGrantedAuthority(authority.getName().name()))
                 .collect(Collectors.toSet()));
 
         return grantedAuthorities;
     }
-
-
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return Stream.concat(
-//                roles.stream().map(role -> (GrantedAuthority) role),
-//                authorities.stream().map(authority -> (GrantedAuthority) authority)
-//        ).collect(Collectors.toSet());
-//    }
 
     @Override
     public String getUsername() {

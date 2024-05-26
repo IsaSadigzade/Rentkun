@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -24,13 +25,15 @@ public class Advertiser {
     private boolean advertActive;
     private boolean vehicleActive;
     private BigDecimal price;
+    private LocalDate availableFromDate;
+    private LocalDate availableToDate;
 
-    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
 
     @CreationTimestamp
@@ -40,4 +43,19 @@ public class Advertiser {
     @UpdateTimestamp
     @Temporal(value = TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
+
+    @PrePersist
+    public void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
+    public void addAdditionalDays(long days) {
+        this.availableToDate = this.availableToDate.plusDays(days);
+    }
 }

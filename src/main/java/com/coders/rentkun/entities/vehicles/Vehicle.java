@@ -1,5 +1,6 @@
 package com.coders.rentkun.entities.vehicles;
 
+import com.coders.rentkun.entities.common.Advertiser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,14 +16,6 @@ public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-//    private boolean available = true;
-
-//    @Enumerated(EnumType.STRING)
-//    private RentalStatus rentalStatus;
-
-    //TODO: These dates for advert
-//    private LocalDate availableFromDate;
-//    private LocalDate availableToDate;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "vehicle_details_id")
@@ -67,6 +60,9 @@ public class Vehicle {
             inverseJoinColumns = @JoinColumn(name = "vehicle_images_id")
     )
     private Set<VehicleImages> vehicleImages;
+
+    @OneToOne(mappedBy = "vehicle", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Advertiser advertiser;
 
     public Vehicle(VehicleDetails vehicleDetails,
                    VehicleBrand vehicleBrand,

@@ -104,6 +104,26 @@ public class VehicleService {
 
     }
 
+    public Vehicle updateAdvertedVehicle(Long vehicleId, UpdateVehicleRequestDto vehicleRequestDto) {
+        Vehicle foundVehicle = findByVehicleId(vehicleId);
+        vehicleDetailsService.updateVehicleDetails(foundVehicle.getVehicleDetails().getId(), vehicleRequestDto.getDetailsRequest());
+        VehicleDetails foundDetails = vehicleDetailsService.findByVehicleDetailsId(foundVehicle.getVehicleDetails().getId());
+
+        Object[] objects = findAllDetailsOfVehicle(vehicleRequestDto);
+        Set<VehicleFeature> foundFeatures = vehicleFeaturesService.findFeaturesByIds(vehicleRequestDto.getFeatureIds());
+
+        return vehicleRepository.save(
+                vehicleDtoConverter.convertToEntity(
+                        foundVehicle,
+                        foundDetails,
+                        objects,
+                        foundFeatures
+                )
+        );
+
+    }
+
+
     public void deleteVehicle(Long vehicleId) {
         if (isVehicleExist(vehicleId)) {
             vehicleRepository.deleteById(vehicleId);
