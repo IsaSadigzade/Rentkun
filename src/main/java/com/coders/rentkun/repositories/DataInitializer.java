@@ -4,6 +4,8 @@ import com.coders.rentkun.entities.users.Authority;
 import com.coders.rentkun.entities.users.Role;
 import com.coders.rentkun.entities.users.enums.EAuthority;
 import com.coders.rentkun.entities.users.enums.ERole;
+import com.coders.rentkun.repositories.users.AuthorityRepository;
+import com.coders.rentkun.repositories.users.RoleRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;

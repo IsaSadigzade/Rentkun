@@ -5,12 +5,11 @@ import com.coders.rentkun.dtos.common.request.UpdateAdvertRequest;
 import com.coders.rentkun.dtos.common.request.UpdateAdvertTimeRequest;
 import com.coders.rentkun.dtos.common.response.AdvertiserResponse;
 import com.coders.rentkun.dtos.vehicles.converts.VehicleDtoConverter;
+import com.coders.rentkun.dtos.vehicles.responses.VehicleResponseDto;
 import com.coders.rentkun.entities.common.Advertiser;
 import com.coders.rentkun.entities.users.User;
 import com.coders.rentkun.entities.vehicles.Vehicle;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDate;
 
 @Component
 public class AdvertiserDtoConverter {
@@ -24,6 +23,7 @@ public class AdvertiserDtoConverter {
         Advertiser advertiser = new Advertiser();
         advertiser.setAdvertActive(true);
         advertiser.setVehicleActive(true);
+        advertiser.setVehicleRented(false);
         advertiser.onCreate();
         advertiser.setUser(advertingUser);
         advertiser.setVehicle(foundVehicle);
@@ -56,6 +56,17 @@ public class AdvertiserDtoConverter {
         advertiserResponse.setAvailableFromDate(advertiser.getAvailableFromDate());
         advertiserResponse.setAvailableToDate(advertiser.getAvailableToDate());
         advertiserResponse.setUsername(advertiser.getUser().getUserInfos().getFirstName() + " " + advertiser.getUser().getUserInfos().getLastName());
+        return advertiserResponse;
+    }
+
+    public AdvertiserResponse convertToResponse(Advertiser advertiser, VehicleResponseDto responseDto) {
+        AdvertiserResponse advertiserResponse = new AdvertiserResponse();
+        advertiserResponse.setId(advertiser.getId());
+        advertiserResponse.setUsername(advertiser.getUser().getUserInfos().getFirstName() + " " + advertiser.getUser().getUserInfos().getLastName());
+        advertiserResponse.setVehicleResponse(responseDto);
+        advertiserResponse.setPrice(advertiser.getPrice());
+        advertiserResponse.setAvailableFromDate(advertiser.getAvailableFromDate());
+        advertiserResponse.setAvailableToDate(advertiser.getAvailableToDate());
         return advertiserResponse;
     }
 }

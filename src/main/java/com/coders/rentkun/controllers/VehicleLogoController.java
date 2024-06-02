@@ -3,7 +3,7 @@ package com.coders.rentkun.controllers;
 import com.coders.rentkun.core.utilities.results.DataResult;
 import com.coders.rentkun.core.utilities.results.SuccessDataResult;
 import com.coders.rentkun.dtos.vehicles.responses.LogoResponseDto;
-import com.coders.rentkun.services.VehicleLogoService;
+import com.coders.rentkun.services.vehicles.VehicleLogoService;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

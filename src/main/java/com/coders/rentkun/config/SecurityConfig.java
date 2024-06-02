@@ -3,7 +3,7 @@ package com.coders.rentkun.config;
 import com.coders.rentkun.security.JwtAuthenticationEntryPoint;
 import com.coders.rentkun.security.JwtAuthenticationFilter;
 import com.coders.rentkun.security.JwtTokenProvider;
-import com.coders.rentkun.services.UserService;
+import com.coders.rentkun.services.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

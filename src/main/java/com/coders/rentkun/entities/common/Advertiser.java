@@ -24,6 +24,7 @@ public class Advertiser {
 
     private boolean advertActive;
     private boolean vehicleActive;
+    private boolean vehicleRented;
     private BigDecimal price;
     private LocalDate availableFromDate;
     private LocalDate availableToDate;
@@ -56,6 +57,6 @@ public class Advertiser {
     }
 
     public void addAdditionalDays(long days) {
-        this.availableToDate = this.availableToDate.plusDays(days);
+        this.availableToDate = this.availableFromDate.plusDays(days);
     }
 }

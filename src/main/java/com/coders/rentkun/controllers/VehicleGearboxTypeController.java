@@ -3,7 +3,7 @@ package com.coders.rentkun.controllers;
 import com.coders.rentkun.dtos.vehicles.requests.CreateGearboxTypeRequestDto;
 import com.coders.rentkun.dtos.vehicles.requests.UpdateGearboxTypeRequestDto;
 import com.coders.rentkun.dtos.vehicles.responses.GearboxTypeResponseDto;
-import com.coders.rentkun.services.VehicleGearboxTypeService;
+import com.coders.rentkun.services.vehicles.VehicleGearboxTypeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

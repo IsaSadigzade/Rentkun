@@ -4,7 +4,7 @@ import com.coders.rentkun.dtos.vehicles.requests.CreateModelRequestDto;
 import com.coders.rentkun.dtos.vehicles.requests.UpdateModelRequestDto;
 import com.coders.rentkun.dtos.vehicles.responses.BrandModelResponseDto;
 import com.coders.rentkun.dtos.vehicles.responses.ModelResponseDto;
-import com.coders.rentkun.services.VehicleModelService;
+import com.coders.rentkun.services.vehicles.VehicleModelService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

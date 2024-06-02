@@ -1,6 +1,6 @@
 package com.coders.rentkun.dtos.vehicles.responses;
 
-import com.coders.rentkun.enums.common.RentalStatus;
+import com.coders.rentkun.entities.common.enums.RentalStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

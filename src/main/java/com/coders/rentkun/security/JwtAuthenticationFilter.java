@@ -1,6 +1,6 @@
 package com.coders.rentkun.security;
 
-import com.coders.rentkun.services.UserService;
+import com.coders.rentkun.services.users.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

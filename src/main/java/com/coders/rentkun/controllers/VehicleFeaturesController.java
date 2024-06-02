@@ -3,7 +3,7 @@ package com.coders.rentkun.controllers;
 import com.coders.rentkun.dtos.vehicles.requests.CreateFeatureRequestDto;
 import com.coders.rentkun.dtos.vehicles.requests.UpdateFeatureRequestDto;
 import com.coders.rentkun.dtos.vehicles.responses.FeatureResponseDto;
-import com.coders.rentkun.services.VehicleFeaturesService;
+import com.coders.rentkun.services.vehicles.VehicleFeaturesService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

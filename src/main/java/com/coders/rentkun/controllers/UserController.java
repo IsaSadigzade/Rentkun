@@ -8,7 +8,7 @@ import com.coders.rentkun.dtos.users.requests.UserEmailAndPhoneNumberUpdateReque
 import com.coders.rentkun.dtos.users.requests.UserPasswordUpdateRequestDto;
 import com.coders.rentkun.dtos.users.responses.CurrentUserResponseDto;
 import com.coders.rentkun.dtos.users.responses.UpdatedEmailAndPhoneNumberResponseDto;
-import com.coders.rentkun.services.UserService;
+import com.coders.rentkun.services.users.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -7,8 +7,8 @@ import com.coders.rentkun.entities.users.Authority;
 import com.coders.rentkun.entities.users.Role;
 import com.coders.rentkun.entities.users.User;
 import com.coders.rentkun.entities.users.UserInfos;
-import com.coders.rentkun.services.AuthorityService;
-import com.coders.rentkun.services.RoleService;
+import com.coders.rentkun.services.users.AuthorityService;
+import com.coders.rentkun.services.users.RoleService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 

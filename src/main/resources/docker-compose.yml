@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:latest
+    ports:
+      - "5444:5432"
+    environment:
+      POSTGRES_DB: rentkun_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pass123
+
+  app:
+    build:
+      context: ../../..   # Adjust the context path based on your project structure
+      dockerfile: /Dockerfile # Dockerfile should be in the root directory specified by the context
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/rentkun_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: pass123
+    ports:
+      - "9090:8080"
