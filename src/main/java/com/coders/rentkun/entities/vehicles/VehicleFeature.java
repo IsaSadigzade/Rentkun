@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,8 +18,11 @@ public class VehicleFeature {
     private Long id;
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vehicle_id")
+    @ManyToMany(mappedBy = "vehicleFeatures", fetch = FetchType.LAZY)
     @JsonIgnore
-    private Vehicle vehicle;
+    private Set<Vehicle> vehicles;
+
+    public VehicleFeature(String name) {
+        this.name = name;
+    }
 }

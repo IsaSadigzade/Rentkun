@@ -10,4 +10,6 @@ public interface VehicleFeaturesRepository extends JpaRepository<VehicleFeature,
     Optional<VehicleFeature> findByName(String featureName);
 
     Set<VehicleFeature> findByIdIn(Set<Long> featureIds);
+
+    boolean existsByName(String featureName);
 }

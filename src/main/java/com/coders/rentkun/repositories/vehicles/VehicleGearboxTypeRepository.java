@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface VehicleGearboxTypeRepository extends JpaRepository<VehicleGearboxType, Long> {
     Optional<VehicleGearboxType> findByName(String gearboxTypeName);
+
+    boolean existsByName(String displayName);
 }

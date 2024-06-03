@@ -22,4 +22,8 @@ public class VehicleBrand {
     @OneToMany(mappedBy = "vehicleBrand", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<VehicleModel> models;
+
+    public VehicleBrand(String name) {
+        this.name = name;
+    }
 }

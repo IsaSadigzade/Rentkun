@@ -15,4 +15,8 @@ public class VehicleFuelType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+
+    public VehicleFuelType(String name) {
+        this.name = name;
+    }
 }

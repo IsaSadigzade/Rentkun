@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface VehicleTypeRepository extends JpaRepository<VehicleType, Long> {
     Optional<VehicleType> findByName(String fuelTypeName);
+
+    boolean existsByName(String typeName);
 }

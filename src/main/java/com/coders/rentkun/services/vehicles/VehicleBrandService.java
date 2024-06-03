@@ -92,7 +92,7 @@ import java.util.stream.Collectors;
                 .orElseThrow(() -> new BrandNotFoundException("Brand couldn't be found by following id: " + brandId));
     }
 
-    protected VehicleBrand findBrandByBrandName(String brandName) {
+    public VehicleBrand findBrandByBrandName(String brandName) {
         return vehicleBrandRepository.findByName(brandName)
                 .orElseThrow(() -> new BrandNotFoundException("Brand couldn't be found by following brandName: " + brandName));
     }

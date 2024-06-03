@@ -21,4 +21,9 @@ public class VehicleModel {
     @JoinColumn(name = "vehicle_brand_id")
     @JsonIgnore
     private VehicleBrand vehicleBrand;
+
+    public VehicleModel(String name, VehicleBrand vehicleBrand) {
+        this.name = name;
+        this.vehicleBrand = vehicleBrand;
+    }
 }

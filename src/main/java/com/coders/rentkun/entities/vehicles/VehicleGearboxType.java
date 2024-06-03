@@ -15,4 +15,8 @@ public class VehicleGearboxType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+
+    public VehicleGearboxType(String name) {
+        this.name = name;
+    }
 }
